@@ -102,3 +102,8 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Custom ignores
+dist-newstyle/cache/
+dist-newstyle/tmp/
+dist-newstyle/build/*
