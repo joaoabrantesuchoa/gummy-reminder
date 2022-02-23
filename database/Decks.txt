@@ -1,2 +1,1 @@
-Deck {nome = "Deck1", cartas = [Card {front = "Teste front", back = "Teste back"}]}
-Deck {nome = "Deck2", cartas = [Card {front = "Teste front", back = "Teste back"}]}
+[Deck {name = "Deck1", cards = [Card {front = "Teste front", back = "Teste back"}]},Deck {name = "Deck2", cards = [Card {front = "Teste front", back = "Teste back"}]},Deck {name = "Deck3", cards = [Card {front = "Teste front", back = "Teste back"}]},Deck {name = "Deck4", cards = [Card {front = "Teste front", back = "Teste back"}]}]
