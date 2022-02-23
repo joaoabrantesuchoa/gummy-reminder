@@ -1,0 +1,2 @@
+Deck {nome = "Deck1", cartas = [Card {front = "Teste front", back = "Teste back"}]}
+Deck {nome = "Deck2", cartas = [Card {front = "Teste front", back = "Teste back"}]}
