@@ -1,13 +1,15 @@
 module Main where
 import Util.TxtController
+import Util.DeckController
 import Models.Deck
 import Models.Card
 import Data.List (delete)
 
 main :: IO()
-main = do    
-  decks <- loadDB
-  print decks
+main = do
+  printDB
+  editDeckAndSave "deck1" "Deck1"
+  printDB
 
   -- main:: IO()
   -- main = do
