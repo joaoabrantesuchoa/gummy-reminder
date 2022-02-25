@@ -64,7 +64,6 @@ module Util.DeckController where
     --
     -- This action will carry changes to 'database/Decks.txt'.
     removeAndSave :: v -> IO [Deck]
-  
   instance CanRemoveAndSave String where
     removeAndSave nameToSearch = do
       db <- loadDB
