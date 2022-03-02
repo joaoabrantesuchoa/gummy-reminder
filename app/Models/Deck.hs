@@ -1,18 +1,23 @@
 module Models.Deck where
 	import qualified Models.Card as C
+	import Data.List
 
 	data Deck = Deck {
 		name:: String,
 		cards:: [C.Card]
 	} deriving (Show, Read)
 
-	-- addCard:: Deck -> C.Card -> Deck
-	-- addCard deck newCard = 
-	-- 	Deck (deck) (name deck) (cards deck ++ [newCard])
+	addCard:: Deck -> C.Card -> Deck
+	addCard deck newCard = 
+	 	Deck (name deck) (cards deck ++ [newCard])
 
-	--setName:: Deck -> String -> Deck
-	--setName deck newName = 
-	--	Deck {idDeck deck, name = newName, cards deck}
+	removeCard:: Deck -> C.Card -> Deck
+	removeCard deck card =
+		Deck (name deck) (delete card (cards deck))
 
-	--getNome:: Deck -> String
-	--getNome name = 
+	editCard:: Deck -> C.Card -> String -> String -> Deck
+	editCard deck card newFront newBack = do
+		let editedCard = C.Card newFront newBack
+		let editedDeck = removeCard deck card
+		Deck (name deck) (cards editedDeck ++ [editedCard])
+

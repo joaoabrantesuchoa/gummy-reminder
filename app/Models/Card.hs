@@ -2,4 +2,4 @@ module Models.Card where
 	data Card = Card {
 		front:: String,
 		back:: String
-	} deriving (Show, Read)
+	} deriving (Show, Read, Eq)
