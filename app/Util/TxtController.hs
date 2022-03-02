@@ -18,7 +18,6 @@ module Util.TxtController where
     file <- readFile "./database/Decks.txt"
     let lista = (read file :: [Deck])
     seq (length lista) (return ())
-    print lista
 
   -- |Writes given deck list into Decks database.
   writeDB :: [Deck] -> IO ()

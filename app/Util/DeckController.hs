@@ -18,6 +18,18 @@ module Util.DeckController where
   import Data.List (elemIndex)
   import Data.Maybe (fromMaybe)
 
+  -- |Returns the deck names from the database.
+  getDecksNames :: IO [String]
+  getDecksNames = do
+    db <- loadDB
+    let names = getDecksNamesRecursive [] db
+    return names
+  
+  -- |Create the list with the deck names.
+  getDecksNamesRecursive :: [String] -> [Deck] -> [String]
+  getDecksNamesRecursive _ [] = []
+  getDecksNamesRecursive names (x : xs) = [(name x)] ++ getDecksNamesRecursive names xs
+
   -- |Adds a deck to the database, but doesn\'t saves it.
   add :: Deck -> IO [Deck]
   add deck = do
