@@ -4,34 +4,23 @@ module Util.TxtController where
   import Models.Deck
   import Data.List (delete)
 
-
-  loadDB :: IO([Deck])
+  -- |Loads Decks database into memory, and returns it as a list ([Deck])
+  loadDB :: IO [Deck]
   loadDB = do
     file <- readFile "./database/Decks.txt"
     let lista = (read file :: [Deck])
     seq (length lista) (return ())
     return lista
     
-  addDeck :: Deck -> IO ()
-  addDeck deck = do
-    db <- loadDB 
-    let addedList = db ++ [deck]
-    writeFile "./database/Decks.txt" (show addedList)
+  -- |Prints Decks database into stdin
+  printDB :: IO ()
+  printDB = do
+    file <- readFile "./database/Decks.txt"
+    let lista = (read file :: [Deck])
+    seq (length lista) (return ())
+    print lista
 
-  searchByName :: String -> IO Deck
-  searchByName nameToSearch = do
-    db <- loadDB
-    let m = filter (eqName nameToSearch) db
-    return (head m)
-
-  -- TODO: Não está feito
-  -- removeByName :: String -> IO ()
-  -- removeByName nameToSearch = do
-  --   db <- loadDB
-  --   let deck = searchByName nameToSearch
-  --   let decks = filter ()
-  --   writeFile "./database/Decks.txt" (show decks)
-
-
-  eqName :: String -> Deck -> Bool
-  eqName nameToSearch deck = nameToSearch == (name deck)
+  -- |Writes given deck list into Decks database.
+  writeDB :: [Deck] -> IO ()
+  writeDB deck = do
+    writeFile "./database/Decks.txt" (show deck)

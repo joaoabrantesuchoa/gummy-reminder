@@ -1,4 +1,5 @@
 module Models.Card where
+
 	data Card = Card {
 		front:: String,
 		back:: String

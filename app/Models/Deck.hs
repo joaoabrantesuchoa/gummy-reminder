@@ -2,10 +2,10 @@ module Models.Deck where
 	import qualified Models.Card as C
 	import Data.List
 
-	data Deck = Deck {
-		name:: String,
-		cards:: [C.Card]
-	} deriving (Show, Read)
+  data Deck = Deck {
+    name:: String,
+    cards:: [C.Card]
+  } deriving (Show, Read, Eq)
 
 	addCard:: Deck -> C.Card -> Deck
 	addCard deck newCard = 
@@ -20,4 +20,3 @@ module Models.Deck where
 		let editedCard = C.Card newFront newBack
 		let editedDeck = removeCard deck card
 		Deck (name deck) (cards editedDeck ++ [editedCard])
-
