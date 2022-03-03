@@ -6,7 +6,6 @@ import Models.Card
 import Data.List (group)
 
 
-
 menuDecks:: IO String
 menuDecks = do
   namesDecks <- getDecksNames
@@ -40,7 +39,10 @@ initialMenu =
     "──────────────────── Bem-vindo ────────────────────\n\n"
   ++"              Aprenda com o auxílio de             \n"
   ++"               cartões de memorização             \n\n"
-  ++"     > Pressione qualquer tecla para iniciar <       "
+  ++"          > Pressione ENTER para iniciar <          "
 
 putLine:: String
-putLine = "───────────────────────────────────────────────────\n"
+putLine = "───────────────────────────────────────────────────\n" 
+
+-- createTitle:: String -> String
+-- createTitle = 

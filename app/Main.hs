@@ -41,14 +41,15 @@ chooseDeckMenu = do
   putStrLn "> Escolha o número do deck: "
   numDeck <- readLn
   db <- loadDB
+  putStrLn ""
   
-  case (numDeck > 0 || numDeck <= length db) of
+  case (numDeck > 0 && numDeck <= length db) of
     True -> do
       let deck = db!!(numDeck-1)
-      putStrLn $ show deck
+      cardsMenu (cards deck)
     False -> do
-      putStrLn "# Número inválido #"
-      chooseDeckMenu
+      putStrLn "\n# Número inválido #\n"
+      chooseDeckMenu 
 
 removeDeckMenu:: IO ()
 removeDeckMenu = do
@@ -56,5 +57,35 @@ removeDeckMenu = do
 
 errorMenu:: IO()
 errorMenu = do
-  putStrLn "error"
-                                               
+  putStrLn "# Opção inválida #\n"
+  mainMenu
+
+cardsMenu:: [Card] -> IO()
+cardsMenu cards = do
+  let headCard = (head cards)
+
+  case length cards == 0 of
+    True -> do
+      putStrLn putLine
+      putStrLn "        Você concluiu o estudo desse deck :D      \n"
+      putStrLn putLine
+      mainMenu
+    False -> do
+      cardQA headCard
+      cardsMenu $ tail cards
+  
+
+cardQA:: Card -> IO()
+cardQA card = do
+  putStrLn putLine
+  putStrLn (front card)
+
+  putStrLn "\n    > Pressione ENTER para revelar a resposta <    "
+  getLine
+
+  putStrLn putLine
+
+  putStrLn (back card)
+  putStrLn "\n        > Pressione ENTER para continuar <       "
+  getLine 
+  return ()
