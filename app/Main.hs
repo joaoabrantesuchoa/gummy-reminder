@@ -1,66 +1,60 @@
 module Main where
 import Util.TxtController
 import Util.DeckController
+import Util.CLIController
 import Models.Deck
 import Models.Card
-import Data.List (delete)
+import Data.Char
 
 main :: IO ()
 main = do
-  names <- getDecksNames
-  print names
-  --editDeckAndSave "deck1" "Deck1"
-  --printDB
+  putStrLn gummyReminderLogo
+  putStrLn initialMenu
+  getLine
+  putStrLn putLine
+  mainMenu
 
-  -- main:: IO()
-  -- main = do
-    -- let deck1 = Deck 1 "Deck1" []
-    -- let newDeck = addCard deck1 card1 
-    -- let card2 = Card 2 "asdasdasdas" "czxczxczx" 
-    -- let newDeck2 = addCard newDeck card2 
-    -- putStrLn $ show card1 
-    -- putStrLn $ show deck1 
-    -- putStrLn $ show newDeck
-    -- putStrLn $ show newDeck2
-    
+mainMenu:: IO ()
+mainMenu = do
+  menu <- menuDecks
+  putStrLn menu
 
+  putStrLn "[C] Criar deck  [E] Escolher deck  [R] Remover deck"
+  putStrLn "\n> O que você deseja? "
+  option <- getLine
+  putStrLn ""
+  menuOptions (map toUpper option)
 
-  -- gummyReminderLogo::String
-  -- gummyReminderLogo =
-  -- 	"\n"
-  -- 	++"  ==================================================  \n"
-  -- 	++"                                                      \n"		
-  -- 	++"   _______                                            \n"
-  -- 	++"  |   _   .--.--.--------.--------.--.--.             \n"
-  -- 	++"  |.  |___|  |  |        |        |  |  |             \n"
-  -- 	++"  |.  |   |_____|__|__|__|__|__|__|___  |             \n"
-  -- 	++"  |:  1   |                       |_____|             \n"
-  -- 	++"  |::.. . |                                           \n"
-  -- 	++"  `-------'                                           \n"
-  -- 	++"   _______                __          __              \n"
-  -- 	++"  |   _   .-----.--------|__.-----.--|  .-----.----.  \n"
-  -- 	++"  |.  l   |  -__|        |  |     |  _  |  -__|   _|  \n"
-  -- 	++"  |.  _   |_____|__|__|__|__|__|__|_____|_____|__|    \n"
-  -- 	++"  |:  |   |                                           \n"
-  -- 	++"  |::.|:. |                                           \n"
-  -- 	++"  `--- ---'                                           \n"
-  -- 	++"                                                      \n"		
-  -- 	++"  ==================================================  \n"	
+menuOptions:: String -> IO ()
+menuOptions option | option == "C" = createDeckMenu
+                   | option == "E" = chooseDeckMenu
+                   | option == "R" = removeDeckMenu
+                   | otherwise = errorMenu
 
+createDeckMenu:: IO ()
+createDeckMenu = do
+  putStrLn putLine
+  putStrLn "create"
 
-  -- gummyReminderLogo:: String
-  -- gummyReminderLogo =
-  -- 	"\n"
-  -- 	++"  .--.                                           \n"
-  -- 	++" : .--'                                          \n"
-  -- 	++" : : _ .-..-.,-.,-.,-.,-.,-.,-..-..-.            \n"
-  -- 	++" : :; :: :; :: ,. ,. :: ,. ,. :: :; :            \n"
-  -- 	++" `.__.'`.__.':_;:_;:_;:_;:_;:_;`._. ;            \n"
-  -- 	++"                                .-. :            \n"
-  -- 	++"                                `._.'            \n"
-  -- 	++" .---.                 _          .-.            \n"
-  -- 	++" : .; :               :_;         : :            \n"
-  -- 	++" :   .' .--. ,-.,-.,-..-.,-.,-. .-' : .--. .--.  \n"
-  -- 	++" : :.`.' '_.': ,. ,. :: :: ,. :' .; :' '_.': ..' \n"
-  -- 	++" :_;:_;`.__.':_;:_;:_;:_;:_;:_;`.__.'`.__.':_;   \n"
+chooseDeckMenu:: IO ()
+chooseDeckMenu = do
+  putStrLn "> Escolha o número do deck: "
+  numDeck <- readLn
+  db <- loadDB
+  
+  case (numDeck > 0 || numDeck <= length db) of
+    True -> do
+      let deck = db!!(numDeck-1)
+      putStrLn $ show deck
+    False -> do
+      putStrLn "# Número inválido #"
+      chooseDeckMenu
+
+removeDeckMenu:: IO ()
+removeDeckMenu = do
+  putStrLn "remove"
+
+errorMenu:: IO()
+errorMenu = do
+  putStrLn "error"
                                                
