@@ -1,4 +1,4 @@
-{-# LANGUAGE TypeSynonymInstances #-}
+
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-|
@@ -17,6 +17,7 @@ module Util.DeckController where
   import Util.TxtController (loadDB, writeDB)
   import Data.List (elemIndex)
   import Data.Maybe (fromMaybe)
+  import Models.Card
 
   -- |Returns the deck names from the database.
   getDecksNames :: IO [String]
@@ -37,8 +38,7 @@ module Util.DeckController where
   -- This action will carry changes to 'database/Decks.txt'.
   addAndSave :: Deck -> IO [Deck]
   addAndSave deck = do
-    db <- loadDB
-    let addedList = db ++ [deck]
+    addedList <- add deck
     writeDB addedList
     return addedList
 
@@ -48,8 +48,8 @@ module Util.DeckController where
   instance CanSearch String where
     search nameToSearch = do
       db <- loadDB
-      let m = filter (\deck -> nameToSearch >-= deck) db
-      return (if length m == 0 then Deck { name="NIL", cards=[] } else head m)
+      let m = filter (nameToSearch >-=) db
+      return (if null m then Deck { name="NIL", cards=[] } else head m)
 
   class CanRemove v where
     -- |Removes a Deck from database, but doesn\'t removes it from database, instead it does just returns it, while this deck can be searched by name (receiving a 'String') or by a proper 'Models.Deck'.
@@ -73,59 +73,63 @@ module Util.DeckController where
     removeAndSave :: v -> IO [Deck]
   instance CanRemoveAndSave String where
     removeAndSave nameToSearch = do
-      db <- loadDB
-      deck <- search nameToSearch
-      let decks = filter (\deckToCompare -> not (deck >== deckToCompare)) db
+      decks <- remove nameToSearch
       writeDB decks
       return decks
   instance CanRemoveAndSave Deck where
     removeAndSave deck = do
-      db <- loadDB
-      let decks = filter (\deckToCompare -> not (deck >== deckToCompare)) db
+      decks <- remove deck
       writeDB decks
       return decks
 
   class CanEditDeckName v1 v2 where
-    editDeck :: v1 -> v2 -> IO Deck
+    editDeck :: v1 -> v2 -> IO [Deck]
   instance CanEditDeckName String String where
     editDeck deckName newDeckName = do
       db <- loadDB
-      let dbAsNames = map (\elm -> (name elm)) db
+      let dbAsNames = map name db
       let idx = fromMaybe (-1) (elemIndex deckName dbAsNames)
-      case idx == -1 of
-        True -> do 
-          print "Index doesn't exists"
-          return Deck { name="NIL", cards=[] }
-        False -> do
-          let oldElm = db!!idx
-          let newElm = Deck { name=newDeckName, cards=(cards oldElm) }
-          let (s, _:end) = splitAt idx db
-          let newDb = s ++ newElm : end
-          return newElm
-          
+      if idx == -1 then (do
+        print "Index doesn't exists"
+        return db) else (do
+        let oldElm = db!!idx
+        let newElm = Deck { name=newDeckName, cards=cards oldElm }
+        let (s, _:end) = splitAt idx db
+        let newDb = s ++ newElm : end
+        return newDb)
+
+        
+  instance CanEditDeckName String [Card] where
+    editDeck deckName newCards = do
+      db <- loadDB
+      let dbAsNames = map name db
+      let idx = fromMaybe (-1) (elemIndex deckName dbAsNames)
+      if idx == -1 then (do
+        putStrLn "Couldn't find the Deck"
+        return db) else (do
+        let oldElm = db!!idx
+        let newElm = Deck { name=name oldElm, cards=newCards }
+        let (s, _:end) = splitAt idx db
+        let newDb = s ++ newElm : end
+        return newDb)
+
   class CanEditDeckNameAndSave v1 v2 where
     editDeckAndSave :: v1 -> v2 -> IO [Deck]
   instance CanEditDeckNameAndSave String String where
     editDeckAndSave deckName newDeckName = do
-      db <- loadDB
-      let dbAsNames = map (\elm -> (name elm)) db
-      let idx = fromMaybe (-1) (elemIndex deckName dbAsNames)
-      case idx == -1 of
-        True -> do 
-          putStrLn "Couldn't find the Deck"
-          return db
-        False -> do
-          let oldElm = db!!idx
-          let newElm = Deck { name=newDeckName, cards=(cards oldElm) }
-          let (s, _:end) = splitAt idx db
-          let newDb = s ++ newElm : end
-          writeDB newDb
-          return newDb
+      deck <- editDeck deckName newDeckName
+      writeDB deck
+      return deck
+  instance CanEditDeckNameAndSave String [Card] where
+    editDeckAndSave deckName newCards = do
+      deck <- editDeck deckName newCards
+      writeDB deck
+      return deck
 
   -- |Returns true if left-hand name equals to right-hand deck\'s name.
   (>-=) :: String -> Deck -> Bool
-  (>-=) cName deck = (cName) == (name deck)
-  
+  (>-=) cName deck = cName == name deck
+
   -- |Returns true if both decks are equals
   (>==) :: Deck -> Deck -> Bool
   -- TODO: Há alguma especificidade para implementar aqui?
