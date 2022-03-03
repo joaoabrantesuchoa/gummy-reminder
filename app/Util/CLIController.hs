@@ -37,9 +37,9 @@ gummyReminderLogo =
 initialMenu:: String
 initialMenu = 
     "──────────────────── Bem-vindo ────────────────────\n\n"
-  ++"              Aprenda com o auxílio de             \n"
-  ++"               cartões de memorização             \n\n"
-  ++"          > Pressione ENTER para iniciar <          "
+  ++"             Aprenda com o auxílio de             \n"
+  ++"              cartões de memorização             \n\n"
+  ++"         > Pressione ENTER para iniciar <          "
 
 putLine:: String
 putLine = "───────────────────────────────────────────────────\n" 
