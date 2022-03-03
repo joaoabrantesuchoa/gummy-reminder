@@ -18,6 +18,13 @@ module Util.DeckController where
   import Data.List (elemIndex)
   import Data.Maybe (fromMaybe)
 
+  -- |Returns the deck names from the database.
+  getDecksNames :: IO [String]
+  getDecksNames = do
+    db <- loadDB
+    let names = [name deck | deck <- db]
+    return names
+  
   -- |Adds a deck to the database, but doesn\'t saves it.
   add :: Deck -> IO [Deck]
   add deck = do

@@ -5,11 +5,12 @@ import Models.Deck
 import Models.Card
 import Data.List (delete)
 
-main :: IO()
+main :: IO ()
 main = do
-  printDB
-  editDeckAndSave "deck1" "Deck1"
-  printDB
+  names <- getDecksNames
+  print names
+  --editDeckAndSave "deck1" "Deck1"
+  --printDB
 
   -- main:: IO()
   -- main = do
@@ -63,26 +64,3 @@ main = do
   -- 	++" : :.`.' '_.': ,. ,. :: :: ,. :' .; :' '_.': ..' \n"
   -- 	++" :_;:_;`.__.':_;:_;:_;:_;:_;:_;`.__.'`.__.':_;   \n"
                                                
-
-                                                       
-
-
-                                               
-
-                                                       
-                                                       
-
-                                              
-
-                                               
-                                               
-
-                                                   
-
-                                              
-
-                                         
-                  
-
-
-
