@@ -44,5 +44,5 @@ initialMenu =
 putLine:: String
 putLine = "───────────────────────────────────────────────────\n" 
 
--- createTitle:: String -> String
--- createTitle = 
+putLineCard:: String
+putLineCard = "- - - - - - - - - - - - - - - - - - - - - - - - - -\n" 

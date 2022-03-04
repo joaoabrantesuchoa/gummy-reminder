@@ -44,9 +44,6 @@ createDeckMenu = do
   putStrLn "\nDeck criado com sucesso!\n"
   mainMenu
 
-  -- TODO indicar se o deck está vazio na revisão
-  -- TODO editar carta está levando a carta pro fim da lista
-
 
 chooseDeckMenu:: IO ()
 chooseDeckMenu = do
@@ -59,8 +56,9 @@ chooseDeckMenu = do
     True -> do
       putStrLn putLine
       let deck = db!!(numDeck-1)
+      putStrLn $ "<<  " ++ (name deck) ++ "  >>\n"
       putStrLn "[I] Iniciar revisão  [E] Editar nome  [A] Add carta\n          [R] Remover deck   [X] Voltar"
-      putStrLn "\n> O que você deseja? "
+      putStrLn "\n> O que você deseja?"
       option <- getLine
       putStrLn ""
       deckMenuOptions (map toUpper option) deck
@@ -102,18 +100,20 @@ cardsMenu deck deckCards = do
 cardQA:: Deck -> Card -> IO()
 cardQA deck card = do
   putStrLn putLine
+  putStrLn $ "<<  " ++ (name deck) ++ "  >>\n"
   putStrLn (front card)
 
   putStrLn "\n    > Pressione ENTER para revelar a resposta <    "
   getLine
 
-  putStrLn putLine
+  putStrLn putLineCard
 
   putStrLn (back card)
   putStrLn "\n  [E] Editar carta  [R] Remover carta  [X] Voltar  "
   putStrLn "        > Pressione ENTER para continuar <         "  
   putStrLn "\n> O que você deseja? "  
   option <- getLine 
+  putStrLn ""
   cardMenuOptions (map toUpper option) deck card
 
 
@@ -128,7 +128,7 @@ cardMenuOptions option deck card | option == "E" = editCardMenu deck card
 editDeckNameMenu:: Deck -> IO ()
 editDeckNameMenu deck = do
   putStrLn putLine
-  putStrLn "Qual o novo nome do deck?"
+  putStrLn "> Qual o novo nome do deck?"
   newDeckName <- getLine
   editDeckAndSave (name deck) newDeckName
   putStrLn "\nNome alterado com sucesso!\n"
@@ -137,29 +137,23 @@ editDeckNameMenu deck = do
 
 addCardMenu:: Deck -> IO ()
 addCardMenu deck = do
-  putStrLn "Qual será a frente da carta?"
+  putStrLn putLine
+  putStrLn "> Qual será a frente da carta?"
   front <- getLine
 
-  putStrLn "Qual será o verso da carta?"
+  putStrLn "\n> Qual será o verso da carta?"
   back <- getLine
 
   let newCard = Card front back
   let editedDeck = addCard deck newCard
   editDeckAndSave (name editedDeck) (cards editedDeck) 
   putStrLn "\nCarta adicionada com sucesso!\n"
-
-  putStrLn "Você deseja adicionar outra carta? [Y]"
-  option <- getLine 
-  case (map toUpper option) == "Y" of
-    True -> do
-      addCardMenu deck
-    False -> do
-      mainMenu
+  mainMenu
   
 
 removeDeckMenu:: Deck -> IO ()
 removeDeckMenu deck = do
-  putStrLn "> Tem certeza que deseja remover o deck? [Y]"
+  putStrLn "\n> Tem certeza que deseja remover o deck? [Y]"
   option <- getLine 
   case (map toUpper option) == "Y" of
     True -> do
@@ -172,10 +166,10 @@ removeDeckMenu deck = do
 
 editCardMenu:: Deck -> Card -> IO ()
 editCardMenu deck card = do
-  putStrLn "Qual será a frente da carta?"
+  putStrLn "> Qual será a frente da carta?"
   newFront <- getLine
 
-  putStrLn "Qual será o verso da carta?"
+  putStrLn "\n> Qual será o verso da carta?"
   newBack <- getLine
 
   let editedDeck = editCard deck card newFront newBack
@@ -200,7 +194,7 @@ removeCardMenu deck card = do
 
 errorMenu:: IO()
 errorMenu = do
-  putStrLn "# Opção inválida #\n"
+  putStrLn "################# Opção inválida! #################\n"
   mainMenu
 
 
