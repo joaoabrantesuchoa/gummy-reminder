@@ -12,7 +12,7 @@ Trata-se de um programa que usa repetição espaçada com flashcards para ajudar
 
 ## :warning: Requisitos
 Para rodar o programa, é necessário possuir o [Cabal](https://www.haskell.org/cabal/) e o [Git](https://git-scm.com) instalados em sua máquina. A partir deles, você poderá
-seguir a lista de comandos listados na seção listada a baixo.
+seguir a lista de comandos na seção abaixo.
 
 ### :hammer_and_wrench: Execução
 Para executar o programa, siga a sequência de passos:
