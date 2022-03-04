@@ -85,6 +85,7 @@ cardsMenu deck deckCards = do
       putStrLn "              Esse deck está vazio :(           \n"
       mainMenu
     False -> do 
+      shuffleDeckAndSave deckSearch
       let headCard = (head deckCards)
 
       case length deckCards == 0 of

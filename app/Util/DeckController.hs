@@ -156,13 +156,11 @@ module Util.DeckController where
   instance CanShuffleDeckAndSave Deck where
     shuffleDeckAndSave deck = do
       newDb <- shuffleDeck deck
-      print newDb
       writeDB newDb
       return newDb
   instance CanShuffleDeckAndSave String where
     shuffleDeckAndSave deckName = do
       newDb <- shuffleDeck deckName
-      print newDb
       writeDB newDb
       return newDb
 
