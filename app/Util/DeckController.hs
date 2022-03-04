@@ -36,11 +36,19 @@ module Util.DeckController where
   -- |Adds a deck to the database, and saves it.
   --
   -- This action will carry changes to 'database/Decks.txt'.
-  addAndSave :: Deck -> IO [Deck]
-  addAndSave deck = do
-    addedList <- add deck
-    writeDB addedList
-    return addedList
+  class CanAdd v where
+    addAndSave :: v -> IO [Deck] 
+  instance CanAdd Deck where
+    addAndSave deck = do
+      addedList <- add deck
+      writeDB addedList
+      return addedList
+  instance CanAdd String where
+    addAndSave nameDeck = do
+      addedList <- add Deck { name=nameDeck, cards=[] }
+      writeDB addedList
+      return addedList
+  
 
   class CanSearch v where
     -- |Searches a Deck in the database, by name.

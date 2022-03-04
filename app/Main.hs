@@ -14,6 +14,7 @@ main = do
   getLine
   mainMenu
 
+
 mainMenu:: IO ()
 mainMenu = do
   putStrLn putLine
@@ -27,16 +28,25 @@ mainMenu = do
   putStrLn ""
   menuOptions (map toUpper option)
 
+
 menuOptions:: String -> IO ()
 menuOptions option | option == "C" = createDeckMenu
                    | option == "E" = chooseDeckMenu
                    | option == "S" = quitMenu
                    | otherwise = errorMenu
 
+
 createDeckMenu:: IO ()
 createDeckMenu = do
-  putStrLn putLine
-  putStrLn "create"
+  putStrLn "Digite o nome do deck:"
+  nameDeck <- getLine
+  addAndSave nameDeck
+  putStrLn "\nDeck criado com sucesso!\n"
+  mainMenu
+
+  -- TODO indicar se o deck está vazio na revisão
+  -- TODO editar carta está levando a carta pro fim da lista
+
 
 chooseDeckMenu:: IO ()
 chooseDeckMenu = do
@@ -58,6 +68,7 @@ chooseDeckMenu = do
       putStrLn "\n# Número inválido #\n"
       chooseDeckMenu 
 
+
 deckMenuOptions:: String -> Deck -> IO ()
 deckMenuOptions option deck | option == "I" = cardsMenu deck (cards deck)
                             | option == "E" = editDeckNameMenu deck
@@ -66,18 +77,26 @@ deckMenuOptions option deck | option == "I" = cardsMenu deck (cards deck)
                             | option == "X" = mainMenu
                             | otherwise = errorMenu
 
-cardsMenu:: Deck -> [Card] -> IO()
-cardsMenu deck cards = do
-  let headCard = (head cards)
 
-  case length cards == 0 of
+cardsMenu:: Deck -> [Card] -> IO()
+cardsMenu deck deckCards = do
+  deckSearch <- search (name deck)
+  case (length (cards deckSearch)) == 0 of
     True -> do
       putStrLn putLine
-      putStrLn "        Você concluiu o estudo desse deck :D      \n"
+      putStrLn "              Esse deck está vazio :(           \n"
       mainMenu
-    False -> do
-      cardQA deck headCard
-      cardsMenu deck $ tail cards
+    False -> do 
+      let headCard = (head deckCards)
+
+      case length deckCards == 0 of
+        True -> do
+          putStrLn putLine
+          putStrLn "        Você concluiu o estudo desse deck :D      \n"
+          mainMenu
+        False -> do
+          cardQA deck headCard
+          cardsMenu deck $ tail deckCards
   
 
 cardQA:: Deck -> Card -> IO()
@@ -105,6 +124,7 @@ cardMenuOptions option deck card | option == "E" = editCardMenu deck card
                                  | option == "" = return() 
                                  | otherwise = errorMenu       
 
+
 editDeckNameMenu:: Deck -> IO ()
 editDeckNameMenu deck = do
   putStrLn putLine
@@ -127,7 +147,14 @@ addCardMenu deck = do
   let editedDeck = addCard deck newCard
   editDeckAndSave (name editedDeck) (cards editedDeck) 
   putStrLn "\nCarta adicionada com sucesso!\n"
-  mainMenu
+
+  putStrLn "Você deseja adicionar outra carta? [Y]"
+  option <- getLine 
+  case (map toUpper option) == "Y" of
+    True -> do
+      addCardMenu deck
+    False -> do
+      mainMenu
   
 
 removeDeckMenu:: Deck -> IO ()
