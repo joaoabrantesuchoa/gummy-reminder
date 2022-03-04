@@ -23,9 +23,11 @@ Para executar o programa, siga a sequência de passos:
 
 2º Configure o Cabal: 
 
-`cabal update 
-cabal install cabal-install 
-cabal build` 
+`cabal update` 
+
+`cabal install cabal-install`
+
+`cabal build` 
 
 3º Rode o programa: 
 
