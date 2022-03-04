@@ -15,9 +15,11 @@ Esse módulo foi feito para realizar CRUD e operações extras sobre Decks (defi
 module Util.DeckController where
   import Models.Deck
   import Util.TxtController (loadDB, writeDB)
-  import Data.List (elemIndex)
+  import Data.List (elemIndex, permutations)
   import Data.Maybe (fromMaybe)
   import Models.Card
+  import GHC.IO (unsafePerformIO)
+  import System.Random (getStdGen, randomRIO)
 
   -- |Returns the deck names from the database.
   getDecksNames :: IO [String]
@@ -37,7 +39,7 @@ module Util.DeckController where
   --
   -- This action will carry changes to 'database/Decks.txt'.
   class CanAdd v where
-    addAndSave :: v -> IO [Deck] 
+    addAndSave :: v -> IO [Deck]
   instance CanAdd Deck where
     addAndSave deck = do
       addedList <- add deck
@@ -48,7 +50,7 @@ module Util.DeckController where
       addedList <- add Deck { name=nameDeck, cards=[] }
       writeDB addedList
       return addedList
-  
+
 
   class CanSearch v where
     -- |Searches a Deck in the database, by name.
@@ -106,7 +108,7 @@ module Util.DeckController where
         let newDb = s ++ newElm : end
         return newDb)
 
-        
+
   instance CanEditDeckName String [Card] where
     editDeck deckName newCards = do
       db <- loadDB
@@ -133,6 +135,44 @@ module Util.DeckController where
       deck <- editDeck deckName newCards
       writeDB deck
       return deck
+
+  class CanShuffleDeck a where
+    shuffleDeck :: a -> IO [Deck]
+  instance CanShuffleDeck Deck where
+    shuffleDeck deck = do
+      db <- loadDB
+      foundDeck <- search (name deck)
+      shuffledDeck <- rndPermutation (cards foundDeck)
+      editDeck (name deck) shuffledDeck
+  instance CanShuffleDeck String where
+    shuffleDeck deckName = do
+      db <- loadDB
+      foundDeck <- search deckName
+      shuffledDeck <- rndPermutation (cards foundDeck)
+      editDeck deckName shuffledDeck
+
+  class CanShuffleDeckAndSave a where
+    shuffleDeckAndSave :: a -> IO [Deck]
+  instance CanShuffleDeckAndSave Deck where
+    shuffleDeckAndSave deck = do
+      newDb <- shuffleDeck deck
+      print newDb
+      writeDB newDb
+      return newDb
+  instance CanShuffleDeckAndSave String where
+    shuffleDeckAndSave deckName = do
+      newDb <- shuffleDeck deckName
+      print newDb
+      writeDB newDb
+      return newDb
+
+  rndElem :: [a] -> IO a
+  rndElem xs = do
+    index <- randomRIO (0, length xs - 2)
+    return $ xs !! index
+
+  rndPermutation :: [a] -> IO [a]
+  rndPermutation = rndElem . permutations
 
   -- |Returns true if left-hand name equals to right-hand deck\'s name.
   (>-=) :: String -> Deck -> Bool
