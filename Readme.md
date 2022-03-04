@@ -3,11 +3,11 @@
 
 ## :1234: Índice
 
-* [Descrição](Descrição)
-* [Principais Funcionalidades](Principais-Funcionalidades)
-* [Requisitos e Execução](Requisitos)
-* [Implementação](Implementação)
-* [Equipe](Equipe)
+* [Descrição](#descrição)
+* [Principais Funcionalidades](#principais-funcionalidades)
+* [Requisitos e Execução](#requisitos)
+* [Implementação](#implementação)
+* [Equipe](#equipe)
 ## Descrição
 Programa feito em Haskell para a disciplina de PLP.
 Trata-se de um programa que usa repetição espaçada com flashcards para ajudar a memorizar conceitos.
