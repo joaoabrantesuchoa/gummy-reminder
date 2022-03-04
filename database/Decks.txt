@@ -1,0 +1,1 @@
+[Deck {name = "Alem\227o", cards = [Card {front = "Krankenwagen", back = "Ambul\226ncia"},Card {front = "Krankenwagen", back = "Ambul\226ncia"},Card {front = "Erinnerung", back = "Lembrete"}]},Deck {name = "Ingl\234s", cards = [Card {front = "How is it going?", back = "Como vai?"},Card {front = "No worries", back = "N\227o h\225 com o que se preocupar"}]}]
