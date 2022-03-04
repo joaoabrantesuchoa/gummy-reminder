@@ -11,7 +11,7 @@ Trata-se de um programa que usa repetição espaçada com flashcards para ajudar
 - `Revisar`: o usuário inicia o estudo. Cartas são mostradas em ordem aleatória e cabe ao usuário responder corretamente o que está escrito nela.   
 
 ## :warning: Requisitos
-Para rodar o programa, é necessário possuir o Cabal e o Git instalados em sua máquina. A partir deles, você poderá
+Para rodar o programa, é necessário possuir o [Cabal](https://www.haskell.org/cabal/) e o [Git](https://git-scm.com) instalados em sua máquina. A partir deles, você poderá
 seguir a lista de comandos listados na seção listada a baixo.
 
 ### :hammer_and_wrench: Execução
