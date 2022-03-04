@@ -1,5 +1,4 @@
 # :elephant: Gummy Reminder :elephant:
-![Badge Concluído](http://img.shields.io/static/v1?label=STATUS&message=CONCLUÍDO&color=GREEN&style=for-the-badge)
 
 ## Descrição
 Programa feito em Haskell para a disciplina de PLP.
@@ -37,7 +36,7 @@ $ cabal build
 $ cabal run
 ```
 
-## Implementação
+## :computer: Implementação
 A implementação foi realizada em módulos, divindo os grandes blocos de funcionalidades em Controllers, de modo a facilitar o entendimento e manutenção
 do código, e as informações guardados em um arquivo de texto, que serve de banco de dados. Segue os principais módulos:
 * Card: representa uma carta, dividida em frente, em que o usuário visualiza o que deve ser respondido, e verso, que possui a resposta do que foi perguntado.
