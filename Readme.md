@@ -7,7 +7,7 @@
 * [Principais Funcionalidades](#principais-funcionalidades)
 * [Requisitos e Execução](#requisitos)
 * [Implementação](#implementação)
-* [Equipe](#equipe)
+* [Equipe](#:technologist:-equipe)
 ## Descrição
 Programa feito em Haskell para a disciplina de PLP.
 Trata-se de um programa que usa repetição espaçada com flashcards para ajudar a memorizar conceitos.
