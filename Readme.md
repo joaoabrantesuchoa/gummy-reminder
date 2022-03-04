@@ -1,13 +1,6 @@
 # :elephant: Gummy Reminder :elephant:
 ![Badge Concluído](http://img.shields.io/static/v1?label=STATUS&message=CONCLUÍDO&color=GREEN&style=for-the-badge)
 
-## :1234: Índice
-
-* [Descrição](#descrição)
-* [Principais Funcionalidades](#principais-funcionalidades)
-* [Requisitos e Execução](#requisitos)
-* [Implementação](#implementação)
-* [Equipe](#:technologist:-equipe)
 ## Descrição
 Programa feito em Haskell para a disciplina de PLP.
 Trata-se de um programa que usa repetição espaçada com flashcards para ajudar a memorizar conceitos.
