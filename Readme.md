@@ -50,4 +50,4 @@ do código, e as informações guardados em um arquivo de texto, que serve de ba
 * João Gabriel Abrantes ([joaoabrantesuchoa](https://github.com/joaoabrantesuchoa))
 * José Rufino ([joseaorufino](https://github.com/joseaorufino))
 * Pedro Casado ([pgscasado](https://github.com/pgscasado))
-* Pedro Henrique Queiróz ([pedrohenrique-ql](https://github.com/pedrohenrique-ql))
+* Pedro Henrique ([pedrohenrique-ql](https://github.com/pedrohenrique-ql))
