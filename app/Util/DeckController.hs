@@ -142,14 +142,20 @@ module Util.DeckController where
     shuffleDeck deck = do
       db <- loadDB
       foundDeck <- search (name deck)
-      shuffledDeck <- rndPermutation (cards foundDeck)
-      editDeck (name deck) shuffledDeck
+      if length (cards foundDeck) < 2 then (do loadDB)
+        else (do  
+        shuffledDeck <- rndPermutation (cards foundDeck)
+        editDeck (name deck) shuffledDeck
+        )
   instance CanShuffleDeck String where
     shuffleDeck deckName = do
       db <- loadDB
       foundDeck <- search deckName
-      shuffledDeck <- rndPermutation (cards foundDeck)
-      editDeck deckName shuffledDeck
+      if length (cards foundDeck) < 2 then (do loadDB)
+        else (do  
+        shuffledDeck <- rndPermutation (cards foundDeck)
+        editDeck deckName shuffledDeck
+        )
 
   class CanShuffleDeckAndSave a where
     shuffleDeckAndSave :: a -> IO [Deck]
