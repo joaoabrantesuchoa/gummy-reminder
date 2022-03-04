@@ -19,19 +19,23 @@ Para executar o programa, siga a sequência de passos:
 
 1º Clone o repositório Github que está localizado o projeto:
 
-`git clone https://github.com/joaoabrantesuchoa/gummy-reminder/`
+```
+$ git clone https://github.com/joaoabrantesuchoa/gummy-reminder/
+```
 
 2º Configure o Cabal: 
 
-`cabal update` 
-
-`cabal install cabal-install`
-
-`cabal build` 
+```
+$ cabal update 
+$ cabal install cabal-install
+$ cabal build
+```
 
 3º Rode o programa: 
 
-`cabal run`
+```
+$ cabal run
+```
 
 ## Implementação
 A implementação foi realizada em módulos, divindo os grandes blocos de funcionalidades em Controllers, de modo a facilitar o entendimento e manutenção
