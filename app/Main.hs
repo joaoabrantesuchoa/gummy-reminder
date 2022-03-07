@@ -1,7 +1,7 @@
 module Main where
-import Util.TxtController
-import Util.DeckController
-import Util.CLIController
+import Util.Txt
+import Controllers.DeckController
+import Controllers.CLIController
 import Models.Deck
 import Models.Card
 import Data.Char
@@ -195,7 +195,7 @@ removeCardMenu deck card = do
 
 errorMenu:: IO()
 errorMenu = do
-  putStrLn "################# Opção inválida! #################\n"
+  putStrLn putErrorLine
   mainMenu
 
 

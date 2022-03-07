@@ -30,9 +30,9 @@ executable gummy-reminder
     other-modules:
         Models.Card,
         Models.Deck,
-        Util.CLIController,
-        Util.DeckController,
-        Util.TxtController
+        Controllers.CLIController,
+        Controllers.DeckController,
+        Util.Txt
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
