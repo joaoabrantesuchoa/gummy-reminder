@@ -1,5 +1,8 @@
-module Controllers.CLIController where
-import Controllers.DeckController
+module Util.CLIController where
+import Util.TxtController
+import Util.DeckController
+import Models.Deck
+import Models.Card
 import Data.List (group)
 
 
@@ -43,6 +46,3 @@ putLine = "───────────────────────
 
 putLineCard:: String
 putLineCard = "- - - - - - - - - - - - - - - - - - - - - - - - - -\n" 
-
-putErrorLine:: String
-putErrorLine = "################# Opção inválida! #################\n"
