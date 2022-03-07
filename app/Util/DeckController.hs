@@ -12,9 +12,9 @@ Portability : POSIX
 
 Esse módulo foi feito para realizar CRUD e operações extras sobre Decks (definido por 'Models.Decks')
 -}
-module Controllers.DeckController where
+module Util.DeckController where
   import Models.Deck
-  import Util.Txt (loadDB, writeDB)
+  import Util.TxtController (loadDB, writeDB)
   import Data.List (elemIndex, permutations)
   import Data.Maybe (fromMaybe)
   import Models.Card

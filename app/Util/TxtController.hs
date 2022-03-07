@@ -1,4 +1,4 @@
-module Util.Txt where
+module Util.TxtController where
   import System.IO
   import System.Directory
   import Models.Deck
