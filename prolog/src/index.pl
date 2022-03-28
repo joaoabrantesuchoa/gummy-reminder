@@ -1,5 +1,7 @@
 :- use_module('models/deck.pl', [cadastra_deck/4]).
 
+deck(Id, Nome, Cards).
+
 main:-
-  cadastra_deck(1, "Inglês", [ ["Teste", "Test1"] ], Deck1),
+  cadastra_deck(id(1), nome("Inglês"), cards("Teste"), Deck1),
   writeln(Deck1).
