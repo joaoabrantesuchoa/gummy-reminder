@@ -22,7 +22,15 @@ Para executar o programa, siga a sequência de passos:
 $ git clone https://github.com/joaoabrantesuchoa/gummy-reminder/
 ```
 
-2º Configure o Cabal: 
+2º Entre na pasta do projeto em Prolog:
+
+```sh
+$ cd gummy-reminder/haskell
+$ pwd
+<caminho até a pasta atual...>/gummy-reminder/haskell
+```
+
+3º Configure o Cabal: 
 
 ```
 $ cabal update 
@@ -30,7 +38,7 @@ $ cabal install cabal-install
 $ cabal build
 ```
 
-3º Rode o programa: 
+4º Rode o programa: 
 
 ```
 $ cabal run
