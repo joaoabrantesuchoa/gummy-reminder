@@ -24,8 +24,6 @@ $ git clone https://github.com/joaoabrantesuchoa/gummy-reminder/
 
 2º Entre na pasta do projeto em Prolog:
 
-2º Entre na pasta do projeto em Prolog:
-
 ```sh
 $ cd gummy-reminder/haskell
 $ pwd
