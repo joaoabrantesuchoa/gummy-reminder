@@ -9,6 +9,7 @@
 
 createDeck(Name, Cards) :-
 	jsonfunctions:readJSON(File),
+	\+ checkNameDeckAvailableJSON(File, Name),
 	decksToJSON(File, DecksListJSON),
 	deckToJSON(Name, Cards, DeckJSON),
 	append(DecksListJSON, [DeckJSON], OutJSON),

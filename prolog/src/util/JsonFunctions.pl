@@ -7,7 +7,8 @@
 	updateDeckNameJSON/4,
 	shuffleCardsJSON/3,
 	addCardJSON/4,
-	removeCardJSON/4
+	removeCardJSON/4,
+	checkNameDeckAvailableJSON/2
 ]).
 :- use_module(library(http/json)).
 
@@ -63,3 +64,7 @@ shuffleCardsJSON([H|T], DeckName, [H|Out]) :-
 deleteDeckJSON([], _, []).
 deleteDeckJSON([H|T], H.name, T).
 deleteDeckJSON([H|T], DeckName, [H|Out]) :- deleteDeckJSON(T, DeckName, Out).
+
+%Verifica se o nome do deck já existe.
+checkNameDeckAvailableJSON([H|_], H.name).
+checkNameDeckAvailableJSON([_|T], DeckName) :- checkNameDeckAvailableJSON(T, DeckName).
