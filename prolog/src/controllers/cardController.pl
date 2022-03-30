@@ -1,6 +1,6 @@
 :-module('cardController', [
   addCard/2,
-  removeCard/1
+  removeCard/2
 ]).
 :-use_module('../util/jsonfunctions.pl').
 
