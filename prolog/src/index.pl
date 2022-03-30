@@ -1,4 +1,5 @@
-:- use_module('util/jsonfunctions.pl').
+:- use_module('controllers/deckController.pl').
+:- use_module('controllers/cardController.pl').
 
 :- working_directory(CWD, CWD),
 	atom_concat(CWD, '/database', Path),
@@ -9,4 +10,4 @@
 :- set_prolog_flag('encoding', 'utf8').
 
 main():-
-  write("TODO").
+  addCard("Inglês", ["Brother", "Irmão"]).
