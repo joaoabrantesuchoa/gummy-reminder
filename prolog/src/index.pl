@@ -12,4 +12,6 @@
 :- set_prolog_flag('encoding', 'utf8').
 
 main():-
-	gummyReminderLogo().
+	gummyReminderLogo(),
+	initialMenu(),
+	mainMenu().
