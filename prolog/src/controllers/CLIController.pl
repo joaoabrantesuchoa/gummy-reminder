@@ -4,7 +4,7 @@
   mainMenu/0
 ]).
 
-:-use_module('../util/jsonfunctions.pl').
+:-use_module('../util/JsonFunctions.pl').
 :- set_prolog_flag('encoding', 'utf8').
 
 gummyReminderLogo():-

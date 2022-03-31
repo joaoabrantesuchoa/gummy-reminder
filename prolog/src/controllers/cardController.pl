@@ -2,7 +2,7 @@
   addCard/2,
   removeCard/2
 ]).
-:-use_module('../util/jsonfunctions.pl').
+:-use_module('../util/JsonFunctions.pl').
 
 addCard(DeckName, NewCard) :-
 	readJSON(File),

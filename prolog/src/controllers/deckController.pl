@@ -5,7 +5,7 @@
   shuffleCards/1,
   showDecks/0
 ]).
-:-use_module('../util/jsonfunctions.pl').
+:-use_module('../util/JsonFunctions.pl').
 
 createDeck(Name, Cards) :-
 	jsonfunctions:readJSON(File),
