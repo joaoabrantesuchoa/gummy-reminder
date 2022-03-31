@@ -14,4 +14,5 @@
 main():-
 	gummyReminderLogo(),
 	initialMenu(),
-	mainMenu().
+	get_single_char(_),
+	mainMenu(). %loop
