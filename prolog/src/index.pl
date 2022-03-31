@@ -1,5 +1,7 @@
 :- use_module('controllers/deckController.pl').
 :- use_module('controllers/cardController.pl').
+:- use_module('controllers/CLIController.pl').
+
 
 :- working_directory(CWD, CWD),
 	atom_concat(CWD, '/database', Path),
@@ -10,4 +12,4 @@
 :- set_prolog_flag('encoding', 'utf8').
 
 main():-
-  addCard("Inglês", ["Brother", "Irmão"]).
+	gummyReminderLogo().
