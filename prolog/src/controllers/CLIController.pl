@@ -34,7 +34,7 @@ gummyReminderLogo():-
 % Descrição:
 %		Imprime a linha para ser mostrada no meio do card.
 % Parâmetros: Sem parâmetros
-cardLine():- writeln("        - - - - - - - - - - - - - - - - - - - - - - - - - -\n"). 
+cardLine():- writeln("      - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n"). 
 
 % Descrição:
 %		Imprime uma linha no tamanho padrão.
@@ -98,7 +98,7 @@ mainMenu:-
     
   ),
   writeln(MenuDecks),
-  write("\n        [c] Criar deck  [e] Escolher deck  [s] Sair\n"),
+  write("\n             [C] Criar deck  [E] Escolher deck  [S] Sair             \n"),
   write("\n> O que voc\u00EA deseja? "),
   readLine(Option),
   string_upper(Option, OptionUpper),
@@ -130,9 +130,10 @@ listDecksNamesAndIndex(L, [H|T], [HOut|Rest]):-
 %   Aqui são lidas as informações do novo deck a ser criado.
 % Parâmetros: Sem parâmetros
 createDeckMenu():-
-  write("\nDigite o nome do deck: "),
+  nl, line,
+  write("\nDigite o nome do novo deck: "),
   readLine(NameDeck),
-  createDeck(NameDeck, []), nl, line,
+  createDeck(NameDeck, []), line, nl,
   mainMenu().
 
 % Descrição:
@@ -161,9 +162,9 @@ chooseDeck(NumDeckStr):-
   string_concat("\n<<  ", Deck.name, ParcialString),
   string_concat(ParcialString, "  >>", StringName),
   writeln(StringName),
-  writeln("\n[i] Iniciar revis\u00E3o  [e] Editar nome  [a] Add carta\n"),
-  writeln("          [R] Remover deck   [X] Voltar"),
-  write("\n> O que voc\u00EA deseja? "),
+  writeln("\n        [I] Iniciar revis\u00E3o  [E] Editar nome  [A] Add carta"),
+  writeln("                 [R] Remover deck   [X] Voltar\n"),
+  write("> O que voc\u00EA deseja? "),
   readLine(Option), nl, line,
   string_upper(Option, OptionUpper),
   menuOptionsChoosedDeck(OptionUpper, Deck), !.
@@ -194,7 +195,7 @@ editDeckNameMenu(Deck):-
 cardsMenu(Deck, []):-
   length(Deck.cards, LenCards), LenCards =:= 0,
   writeln("\n                       Esse deck est\u00E1 vazio :(\n"), 
-  line, nl, mainMenu(), !.
+  line, mainMenu().
 
 % Descrição:
 %		Condição de deck concluído.
@@ -224,10 +225,10 @@ cardQA(Deck, Card):-
   string_concat(ParcialString, "  >>", StringName),
   nth0(0, Card, Front), nth0(1, Card, Back), nl,
   writeln(Front),
-  writeln("\n        > Pressione qualquer tecla para revelar a resposta <        \n"),
+  writeln("\n             > Pressione ENTER para revelar a resposta <\n"),
   get_single_char(_), cardLine(),
   writeln(Back),
-  writeln("\n           [e] Editar carta  [r] Remover carta  [x] Voltar           "),
+  writeln("\n           [E] Editar carta  [R] Remover carta  [X] Voltar           "),
   writeln("                  > Pressione ENTER para continuar <                  "),
   write("\n> O que voc\u00EA deseja? "),
   readLine(Option), nl, line,
@@ -254,7 +255,7 @@ addCardMenu(Deck):-
 % Parâmetros: 
 %   1: +Deck: O deck a ser removido.
 removeDeckMenu(Deck):-
-  writeln("\n> Tem certeza que deseja remover o deck? [y] "),
+  write("\n> Tem certeza que deseja remover o deck [Y]? "),
   readLine(Option), string_upper(Option, OptionUpper),
   confirmRemove(OptionUpper, Deck).
 
@@ -286,9 +287,9 @@ editCardMenu(Deck, Card):-
   writeln("\n> Qual ser\u00E1 o verso da carta? "),
   readLine(Back),
   append([Front], [Back], NewCard),
-  addCard(Deck.name, NewCard),
+  addCard(Deck.name, NewCard), 
   writeln("\nCarta editada com sucesso!\n"),
-  mainMenu().
+  line, nl, mainMenu().
 
 % Descrição:
 %		Remove um card de um deck
@@ -296,7 +297,7 @@ editCardMenu(Deck, Card):-
 %   1: +Deck: O deck a ser alterado.
 %   2: +Card: O card a ser removido.
 removeCardMenu(Deck, Card):-
-  write("\n> Tem certeza que deseja remover a carta? [y] "),
+  write("\n> Tem certeza que deseja remover a carta [Y]? "),
   readLine(Option), string_upper(Option, OptionUpper),
   confirmRemoveCard(OptionUpper, Deck, Card).
 

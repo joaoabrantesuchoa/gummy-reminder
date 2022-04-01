@@ -26,6 +26,7 @@ createDeck(Name, Cards) :-
 			writeJSON(OutJSON),
 			writeln("\nDeck criado com sucesso!\n")
 		).
+		
 % Descrição:
 %		Remove um deck do banco de dados.
 % Parâmetros:
@@ -35,6 +36,7 @@ deleteDeck(DeckName) :-
 	deleteDeckJSON(File, DeckName, Out),
 	decksToJSON(Out, OutJSON),
 	writeJSON(OutJSON).
+
 % Descrição:
 %		Edita um deck no banco de dados.
 % Parâmetros:
