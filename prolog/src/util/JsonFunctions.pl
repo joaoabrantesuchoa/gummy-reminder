@@ -65,6 +65,6 @@ deleteDeckJSON([], _, []).
 deleteDeckJSON([H|T], H.name, T).
 deleteDeckJSON([H|T], DeckName, [H|Out]) :- deleteDeckJSON(T, DeckName, Out).
 
-%Verifica se o nome do deck já existe.
+% Verifica se o nome do deck já existe.
 checkNameDeckAvailableJSON([H|_], H.name).
 checkNameDeckAvailableJSON([_|T], DeckName) :- checkNameDeckAvailableJSON(T, DeckName).

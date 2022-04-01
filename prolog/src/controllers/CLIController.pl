@@ -48,7 +48,7 @@ initialMenu():-
   writeln("\n"),
   writeln("                       Aprenda com o auxílio de\n"),
   writeln("                        cartões de memorização\n"),
-  writeln("               > Pressione qualquer tecla para iniciar <"),
+  writeln("               > Pressione qualquer tecla para iniciar <\n"),
   line,
   nl.
 
@@ -61,21 +61,22 @@ mainMenu:-
     L == 0 -> MenuDecks = 'Você não possui decks';
     listDecksNamesAndIndex(1, DeckNames, IndexedNames),
     atomic_list_concat(IndexedNames, "\n", DecksList),
-    atomic_concat("Seus decks:\n", DecksList, MenuDecks)
+    atomic_concat("Seus decks:\n\n", DecksList, MenuDecks)
     
   ),
   writeln(MenuDecks),
-  write("              [C] Criar deck  [E] Escolher deck  [S] Sair"),
+  write("\n              [C] Criar deck  [E] Escolher deck  [S] Sair\n"),
   write("\n> O que você deseja? "),
-  get_single_char(OptionCode),
+  read(OptionCode),
   string_codes(Option, [OptionCode]),
   writeln(Option),
-  (
-    Option == "C"; Option == "c" -> createDeckMenu();
-    
-    Option == "E"; Option == "e" -> chooseDeckMenu();
-    Option == "S"; Option == "s" -> halt
-    ).
+  % (
+  %   Option == "C"; Option == "c" -> createDeckMenu();
+  %   Option == "E"; Option == "e" -> chooseDeckMenu();
+  %   Option == "S"; Option == "s" -> halt
+  % ).
+  string_upper(Option, OptionUpper),
+  menuOptionsDeck(OptionUpper).
 
 getDeckName(E, Out):-
   Out = E.name.
@@ -86,8 +87,15 @@ listDecksNamesAndIndex(L, [H|T], [HOut|Rest]):-
   L2 is L+1,
   listDecksNamesAndIndex(L2, T, Rest).
 
-createDeckMenu():- %TODO: Menu de criar deck
-  writeln("").
+createDeckMenu():-
+  writeln("Digite o nome do deck:"),
+  read(NameDeck),
+  createDeck(NameDeck, []),
+  mainMenu().
 
 chooseDeckMenu():- %TODO: Menu de escolher deck
   writeln("").
+
+menuOptionsDeck("C") :- createDeckMenu(), !.
+menuOptionsDeck("E") :- chooseDeckMenu(), !.
+menuOptionsDeck("S") :- halt.
