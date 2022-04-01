@@ -6,6 +6,7 @@
 
 :-use_module('../util/JsonFunctions.pl').
 :- set_prolog_flag('encoding', 'utf8').
+:- style_check(-singleton).
 
 gummyReminderLogo():-
   nl,
@@ -46,7 +47,7 @@ initialMenu():-
   atomic_list_concat([Line30Length, " Bem-vindo ", Line29Length], BemVindo),
   writeln(BemVindo),
   writeln("\n"),
-  writeln("                       Aprenda com o auxílio de\n"),
+  writeln("                        Aprenda com o auxílio de\n"),
   writeln("                        cartões de memorização\n"),
   writeln("               > Pressione qualquer tecla para iniciar <\n"),
   line,
@@ -67,9 +68,7 @@ mainMenu:-
   writeln(MenuDecks),
   write("\n              [C] Criar deck  [E] Escolher deck  [S] Sair\n"),
   write("\n> O que você deseja? "),
-  read(OptionCode),
-  string_codes(Option, [OptionCode]),
-  writeln(Option),
+  read(Option),
   % (
   %   Option == "C"; Option == "c" -> createDeckMenu();
   %   Option == "E"; Option == "e" -> chooseDeckMenu();
@@ -94,8 +93,72 @@ createDeckMenu():-
   mainMenu().
 
 chooseDeckMenu():- %TODO: Menu de escolher deck
-  writeln("").
+  writeln("\n> Escolha o número do deck: "),
+  read(NumDeck),
+  chooseDeck(NumDeck).
+
+chooseDeck(NumDeck):-
+  readJSON(Decks), length(Decks, LenDecks),
+  NumDeck > 0, NumDeck =< LenDecks,
+  Indice is NumDeck - 1, nth0(Indice, Decks, Deck),
+  string_concat("\n<<  ", Deck.name, ParcialString),
+  string_concat(ParcialString, "  >>", StringName),
+  writeln(StringName),
+  writeln("\n[I] Iniciar revisão  [E] Editar nome  [A] Add carta\n"),
+  writeln("          [R] Remover deck   [X] Voltar"),
+  write("\n> O que você deseja? "),
+  read(Option),
+  string_upper(Option, OptionUpper),
+  menuOptionsChoosedDeck(OptionUpper), !.
+
+chooseDeck(NumDeck):-
+  writeln("\n# Número inválido #\n"),
+  mainMenu().
+
+cardsMenu(_, []):-
+  readJSON(Decks)
+  writeln("                 Esse deck está vazio :(\n"), 
+  mainMenu().
+
+% TODO
+% cardsMenu(Deck, Cards):-
+% addCardMenu(Deck):-
+% removeDeckMenu(Deck):-
+% addCardMenu(Deck):-
+
+errorMenu():-
+  writeln("################# Opção inválida! #################\n")
 
 menuOptionsDeck("C") :- createDeckMenu(), !.
 menuOptionsDeck("E") :- chooseDeckMenu(), !.
-menuOptionsDeck("S") :- halt.
+menuOptionsDeck("S") :- halt, !.
+menuOptionsDeck(_) :- errorMenu().
+
+menuOptionsChoosedDeck("I") :- cardsMenu(Deck, Cards), !.
+menuOptionsChoosedDeck("E") :- editDeckNameMenu(), !.
+menuOptionsChoosedDeck("A") :- addCardMenu(), !.
+menuOptionsChoosedDeck("R") :- removeDeckMenu(), !.
+menuOptionsChoosedDeck("X") :- mainMenu(), !.
+menuOptionsChoosedDeck(_) :- errorMenu().
+
+
+% cardsMenu:: Deck -> [Card] -> IO()
+% cardsMenu deck deckCards = do
+%   deckSearch <- search (name deck)
+%   case (length (cards deckSearch)) == 0 of
+%     True -> do
+%       putStrLn putLine
+%       putStrLn "              Esse deck está vazio :(           \n"
+%       mainMenu
+%     False -> do 
+%       shuffleDeckAndSave deckSearch
+%       let headCard = (head deckCards)
+
+%       case length deckCards == 0 of
+%         True -> do
+%           putStrLn putLine
+%           putStrLn "        Você concluiu o estudo desse deck :D      \n"
+%           mainMenu
+%         False -> do
+%           cardQA deck headCard
+%           cardsMenu deck $ tail deckCards
