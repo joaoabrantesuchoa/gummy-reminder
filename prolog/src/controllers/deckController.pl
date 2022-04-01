@@ -9,12 +9,18 @@
 
 createDeck(Name, Cards) :-
 	jsonfunctions:readJSON(File),
-	\+ checkNameDeckAvailableJSON(File, Name), %% TODO Fix isAvailable
-	decksToJSON(File, DecksListJSON),
-	deckToJSON(Name, Cards, DeckJSON),
-	append(DecksListJSON, [DeckJSON], OutJSON),
-	writeJSON(OutJSON).
-	%%   writeln("\nDeck criado com sucesso!\n") ou nao
+	deckExists(Name, Exists),
+	(
+		Exists == "yes" -> 
+			writeln("\nO nome de deck fornecido j\u00E1 est\u00E1 em uso!"),
+			writeln("O deck n\u00E3o foi criado.")
+			;
+			decksToJSON(File, DecksListJSON),
+			deckToJSON(Name, Cards, DeckJSON),
+			append(DecksListJSON, [DeckJSON], OutJSON),
+			writeJSON(OutJSON),
+			writeln("\nDeck criado com sucesso!\n")
+		).
 deleteDeck(DeckName) :-
 	readJSON(File),
 	deleteDeckJSON(File, DeckName, Out),
@@ -37,3 +43,7 @@ showDecksAux([H|T]) :-
 showDecks() :-
 	readJSON(Decks),
 	showDecksAux(Decks).
+
+deckExists(DeckName, Exists):-
+  readJSON(Decks),
+  deckExistsJSON(Decks, DeckName, Exists).
