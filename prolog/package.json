@@ -1,0 +1,12 @@
+{
+  "name": "gummy-reminder",
+  "version": "0.1.0",
+  "description": "",
+  "main": "./src/index.pl",
+  "scripts": {
+    "test": "swipl -s src/index.pl",
+    "start": "swipl -s src/index.pl -g main"
+  },
+  "author": "",
+  "license": "ISC"
+}
