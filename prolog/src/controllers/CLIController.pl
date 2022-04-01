@@ -224,11 +224,11 @@ cardQA(Deck, Card):-
   string_concat(ParcialString, "  >>", StringName),
   nth0(0, Card, Front), nth0(1, Card, Back), nl,
   writeln(Front),
-  writeln("\n        > Pressione ALGUMA LETRA para revelar a resposta <    \n"),
+  writeln("\n        > Pressione qualquer tecla para revelar a resposta <        \n"),
   get_single_char(_), cardLine(),
   writeln(Back),
-  writeln("\n        [e] Editar carta  [r] Remover carta  [x] Voltar  "),
-  writeln("                 > Pressione c para continuar <         "),
+  writeln("\n           [e] Editar carta  [r] Remover carta  [x] Voltar           "),
+  writeln("                  > Pressione ENTER para continuar <                  "),
   write("\n> O que voc\u00EA deseja? "),
   readLine(Option), nl, line,
   string_upper(Option, OptionUpper),
@@ -368,13 +368,12 @@ menuOptionsChoosedDeck(_, _) :- errorMenu().
 %   1: +Option: Se for "E", redireciona ao menu de editar card;
 %               Se for "R", redireciona ao menu de remover;
 %               Se for "X", redireciona ao menu principal;
-%               Se for "C", continua a iterar sobre os cards;
-%               Se for nenhuma acima, mostra "opção inválida";
+%               Se não for nenhuma acima, continua a iterar sobre os cards;
 menuOptionsCard("E", Deck, Card) :- editCardMenu(Deck, Card), !.
 menuOptionsCard("R", Deck, Card) :- removeCardMenu(Deck, Card), !.
 menuOptionsCard("X", _, _) :- nl, mainMenu(), !.
 menuOptionsCard("C", _, _) :- !.
-menuOptionsCard(_, _, _) :- errorMenu().
+menuOptionsCard(_, _, _) :- !.
 
 % Descrição:
 %		Premissa de leitura de string da entrada padrão.
