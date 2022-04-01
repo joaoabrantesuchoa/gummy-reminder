@@ -89,7 +89,7 @@ createDeckMenu():-
   mainMenu().
 
 chooseDeckMenu():-
-  write("\n> Escolha o número do deck: "),
+  write("\n> Escolha o n\u00FAmero do deck: "),
   readLine(NumDeck),
   chooseDeck(NumDeck), !.
 
@@ -110,7 +110,7 @@ chooseDeck(NumDeckStr):-
   menuOptionsChoosedDeck(OptionUpper, Deck), !.
 
 chooseDeck(NumDeck):-
-  writeln("\n# Número inv\u00E1lido #\n"),
+  writeln("\n# N\u00FAmero inv\u00E1lido #\n"),
   line, nl, mainMenu().
 
 editDeckNameMenu(Deck):-
