@@ -41,22 +41,28 @@ updateDeckNameJSON([H|T], DeckName, NewName, [H|Out]) :-
 
 % Mudando o name de um agente
 addCardJSON([], _, _, []).
-addCardJSON([H|_], H.name, NewCard, [_{name:H.name, cards: Cards}]) :-
-	append([NewCard], H.cards, Cards).
+addCardJSON([H|Rest], H.name, NewCard, [_{name:H.name, cards: Cards}|RestOut]) :-
+	append([NewCard], H.cards, Cards),
+	addCardJSON(Rest, H.name, NewCard, RestOut).
 addCardJSON([H|T], DeckName, NewCard, [H|Out]) :- 
 	addCardJSON(T, DeckName, NewCard, Out).
 
 % Mudando o name de um agente
 removeCardJSON([], _, _, []).
-removeCardJSON([H|_], H.name, CardToRemove, [_{name:H.name, cards: Cards}]) :-
-	delete(H.cards, CardToRemove, Cards).
+removeCardJSON([H|Rest], H.name, CardToRemove, [_{name:H.name, cards: Cards}|RestOut]) :-
+	delete(H.cards, CardToRemove, Cards),
+	removeCardJSON(Rest, H.name, CardToRemove, RestOut).
 removeCardJSON([H|T], DeckName, CardToRemove, [H|Out]) :- 
 	removeCardJSON(T, DeckName, CardToRemove, Out).
 
 % Mudando o name de um agente
-shuffleCardsJSON([], _, _, []).
-shuffleCardsJSON([H|_], H.name, [_{name:H.name, cards: Cards}]) :-
-	random_permutation(H.cards, Cards).
+shuffleCardsJSON([], _, []).
+shuffleCardsJSON([H|Rest], H.name, [_{name:H.name, cards: Cards}|RestOut]) :-
+	length(Cards, L),
+	(
+		L > 1 -> random_permutation(H.cards, Cards)
+		),
+	shuffleCardsJSON(Rest, H.name, RestOut).
 shuffleCardsJSON([H|T], DeckName, [H|Out]) :- 
 	shuffleCardsJSON(T, DeckName, Out).
 

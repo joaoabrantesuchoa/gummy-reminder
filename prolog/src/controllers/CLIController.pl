@@ -5,6 +5,7 @@
 ]).
 
 :-use_module('../util/JsonFunctions.pl').
+:-use_module(library(readutil)).
 :- set_prolog_flag('encoding', 'utf8').
 :- style_check(-singleton).
 
@@ -68,7 +69,7 @@ mainMenu:-
   writeln(MenuDecks),
   write("\n        [c] Criar deck  [e] Escolher deck  [s] Sair\n"),
   write("\n> O que você deseja? "),
-  read(Option),
+  readLine(Option),
   string_upper(Option, OptionUpper),
   menuOptionsDeck(OptionUpper).
 
@@ -83,17 +84,18 @@ listDecksNamesAndIndex(L, [H|T], [HOut|Rest]):-
 
 createDeckMenu():-
   writeln("\nDigite o nome do deck:"),
-  read(NameDeck),
+  readLine(NameDeck),
   createDeck(NameDeck, []), nl, line,
   mainMenu().
 
 chooseDeckMenu():-
-  writeln("\n> Escolha o número do deck: "),
-  read(NumDeck),
+  write("\n> Escolha o número do deck: "),
+  readLine(NumDeck),
   chooseDeck(NumDeck), !.
 
-chooseDeck(NumDeck):-
+chooseDeck(NumDeckStr):-
   nl, line, 
+  number_string(NumDeck, NumDeckStr),
   readJSON(Decks), length(Decks, LenDecks),
   NumDeck > 0, NumDeck =< LenDecks,
   Indice is NumDeck - 1, nth0(Indice, Decks, Deck),
@@ -103,7 +105,7 @@ chooseDeck(NumDeck):-
   writeln("\n[i] Iniciar revisão  [e] Editar nome  [a] Add carta\n"),
   writeln("          [R] Remover deck   [X] Voltar"),
   write("\n> O que você deseja? "),
-  read(Option), nl, line,
+  readLine(Option), nl, line,
   string_upper(Option, OptionUpper),
   menuOptionsChoosedDeck(OptionUpper, Deck), !.
 
@@ -113,7 +115,7 @@ chooseDeck(NumDeck):-
 
 editDeckNameMenu(Deck):-
   writeln("\n> Qual o novo nome do deck?"),
-  read(NewDeckName), atom_string(NewDeckName, StrDeckName),
+  readLine(NewDeckName),
   editDeckName(Deck.name, StrDeckName),
   writeln("\nNome alterado com sucesso!\n"),
   line, nl, mainMenu().
@@ -136,21 +138,21 @@ cardQA(Deck, Card):-
   nth0(0, Card, Front), nth0(1, Card, Back), nl,
   writeln(Front),
   writeln("\n        > Pressione ALGUMA LETRA para revelar a resposta <    \n"),
-  read(Letra), cardLine(),
+  get_single_char(_), cardLine(),
   writeln(Back),
   writeln("\n        [e] Editar carta  [r] Remover carta  [x] Voltar  "),
   writeln("                 > Pressione c para continuar <         "),
   write("\n> O que você deseja? "),
-  read(Option), nl, line,
+  readLine(Option), nl, line,
   string_upper(Option, OptionUpper),
   menuOptionsCard(OptionUpper, Deck, Card).
   
 addCardMenu(Deck):-
   writeln("\n> Qual será a frente da carta?"),
-  read(Front), atom_string(Front, StrFront),
+  readLine(Front),
   writeln("\n> Qual será o verso da carta?"),
-  read(Back), atom_string(Back, StrBack),
-  Card = [StrFront, StrBack],
+  readLine(Back),
+  Card = [Front, Back],
   addCard(Deck.name, Card),
   writeln("\nCarta adicionada com sucesso!\n"),
   line, nl,
@@ -158,7 +160,7 @@ addCardMenu(Deck):-
 
 removeDeckMenu(Deck):-
   writeln("\n> Tem certeza que deseja remover o deck? [y]"),
-  read(Option), string_upper(Option, OptionUpper),
+  readLine(Option), string_upper(Option, OptionUpper),
   confirmRemove(OptionUpper, Deck).
 
 confirmRemove("Y", Deck):- 
@@ -169,18 +171,18 @@ confirmRemove(_, _):- nl, line, nl, mainMenu().
 
 editCardMenu(Deck, Card):-
   removeCard(Deck.name, Card),
-  writeln("\n> Qual será a frente da carta?"),
-  read(Front), atom_string(Front, StrFront),
-  writeln("\n> Qual será o verso da carta?"),
-  read(Back), atom_string(Back, StrBack),
-  Card = [StrFront, StrBack],
-  addCard(Deck.name, Card),
+  write("\n> Qual será a frente da carta? "),
+  readLine(Front),
+  write("\n> Qual será o verso da carta? "),
+  readLine(Back),
+  append([Front], [Back], NewCard),
+  addCard(Deck.name, NewCard),
   writeln("\nCarta editada com sucesso!\n"),
   mainMenu().
 
 removeCardMenu(Deck, Card):-
-  writeln("\n> Tem certeza que deseja remover a carta? [y]"),
-  read(Option), string_upper(Option, OptionUpper),
+  write("\n> Tem certeza que deseja remover a carta? [y/n] "),
+  readLine(Option), string_upper(Option, OptionUpper),
   confirmRemoveCard(OptionUpper, Deck, Card).
 
 confirmRemoveCard("Y", Deck, Card):- 
@@ -209,3 +211,5 @@ menuOptionsCard("R", Deck, Card) :- removeCardMenu(Deck, Card), !.
 menuOptionsCard("X", _, _) :- nl, mainMenu(), !.
 menuOptionsCard("C", _, _) :- !.
 menuOptionsCard(_, _, _) :- errorMenu().
+
+readLine(R):- read_line_to_codes(user_input,Cs), atom_codes(A, Cs), atomic_list_concat(L, ' ', A), atom_string(A, R).
