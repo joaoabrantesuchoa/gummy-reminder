@@ -197,7 +197,7 @@ menuOptionsDeck("E") :- chooseDeckMenu(), !.
 menuOptionsDeck("S") :- halt, !.
 menuOptionsDeck(_) :- errorMenu().
 
-menuOptionsChoosedDeck("I", Deck) :- cardsMenu(Deck, Deck.cards), !.
+menuOptionsChoosedDeck("I", Deck) :- shuffleCards(Deck.name), cardsMenu(Deck, Deck.cards), !.
 menuOptionsChoosedDeck("E", Deck) :- editDeckNameMenu(Deck), !.
 menuOptionsChoosedDeck("A", Deck) :- addCardMenu(Deck), !.
 menuOptionsChoosedDeck("R", Deck) :- removeDeckMenu(Deck), !.
