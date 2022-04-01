@@ -49,8 +49,8 @@ initialMenu():-
   atomic_list_concat([Line30Length, " Bem-vindo ", Line29Length], BemVindo),
   writeln(BemVindo),
   write("\n"),
-  writeln("                        Aprenda com o auxílio de"),
-  writeln("                        cartões de memorização\n"),
+  writeln("                        Aprenda com o aux\u00EDlio de"),
+  writeln("                         cart\u00F5es de memoriza\u00E7\u00E3o\n"),
   writeln("               > Pressione qualquer tecla para iniciar <\n"),
   line,
   nl.
@@ -60,7 +60,7 @@ mainMenu:-
   maplist(getDeckName, Decks, DeckNames),
   length(DeckNames, L),
   (
-    L == 0 -> MenuDecks = 'Você não possui decks';
+    L == 0 -> MenuDecks = 'Voc\u00EA n\u00E3o possui decks';
     listDecksNamesAndIndex(1, DeckNames, IndexedNames),
     atomic_list_concat(IndexedNames, "\n", DecksList),
     atomic_concat("Seus decks:\n\n", DecksList, MenuDecks)
@@ -68,7 +68,7 @@ mainMenu:-
   ),
   writeln(MenuDecks),
   write("\n        [c] Criar deck  [e] Escolher deck  [s] Sair\n"),
-  write("\n> O que você deseja? "),
+  write("\n> O que voc\u00EA deseja? "),
   readLine(Option),
   string_upper(Option, OptionUpper),
   menuOptionsDeck(OptionUpper).
@@ -83,7 +83,7 @@ listDecksNamesAndIndex(L, [H|T], [HOut|Rest]):-
   listDecksNamesAndIndex(L2, T, Rest).
 
 createDeckMenu():-
-  writeln("\nDigite o nome do deck:"),
+  write("\nDigite o nome do deck: "),
   readLine(NameDeck),
   createDeck(NameDeck, []), nl, line,
   mainMenu().
@@ -102,19 +102,19 @@ chooseDeck(NumDeckStr):-
   string_concat("\n<<  ", Deck.name, ParcialString),
   string_concat(ParcialString, "  >>", StringName),
   writeln(StringName),
-  writeln("\n[i] Iniciar revisão  [e] Editar nome  [a] Add carta\n"),
+  writeln("\n[i] Iniciar revis\u00E3o  [e] Editar nome  [a] Add carta\n"),
   writeln("          [R] Remover deck   [X] Voltar"),
-  write("\n> O que você deseja? "),
+  write("\n> O que voc\u00EA deseja? "),
   readLine(Option), nl, line,
   string_upper(Option, OptionUpper),
   menuOptionsChoosedDeck(OptionUpper, Deck), !.
 
 chooseDeck(NumDeck):-
-  writeln("\n# Número inválido #\n"),
+  writeln("\n# Número inv\u00E1lido #\n"),
   line, nl, mainMenu().
 
 editDeckNameMenu(Deck):-
-  writeln("\n> Qual o novo nome do deck?"),
+  write("\n> Qual o novo nome do deck? "),
   readLine(NewDeckName),
   editDeckName(Deck.name, StrDeckName),
   writeln("\nNome alterado com sucesso!\n"),
@@ -122,11 +122,11 @@ editDeckNameMenu(Deck):-
 
 cardsMenu(Deck, []):-
   length(Deck.cards, LenCards), LenCards =:= 0,
-  writeln("\n                       Esse deck está vazio :(\n"), 
+  writeln("\n                       Esse deck est\u00E1 vazio :(\n"), 
   line, nl, mainMenu(), !.
 
 cardsMenu(Deck, []):-
-  writeln("\n                  Você concluiu o estudo desse deck :D\n"), 
+  writeln("\n                  Voc\u00EA concluiu o estudo desse deck :D\n"), 
   line, nl, mainMenu(), !.
 
 cardsMenu(Deck, [H|T]):-
@@ -142,15 +142,15 @@ cardQA(Deck, Card):-
   writeln(Back),
   writeln("\n        [e] Editar carta  [r] Remover carta  [x] Voltar  "),
   writeln("                 > Pressione c para continuar <         "),
-  write("\n> O que você deseja? "),
+  write("\n> O que voc\u00EA deseja? "),
   readLine(Option), nl, line,
   string_upper(Option, OptionUpper),
   menuOptionsCard(OptionUpper, Deck, Card).
   
 addCardMenu(Deck):-
-  writeln("\n> Qual será a frente da carta?"),
+  writeln("\n> Qual ser\u00E1 a frente da carta?"),
   readLine(Front),
-  writeln("\n> Qual será o verso da carta?"),
+  writeln("\n> Qual ser\u00E1 o verso da carta?"),
   readLine(Back),
   Card = [Front, Back],
   addCard(Deck.name, Card),
@@ -159,7 +159,7 @@ addCardMenu(Deck):-
   mainMenu().
 
 removeDeckMenu(Deck):-
-  writeln("\n> Tem certeza que deseja remover o deck? [y]"),
+  writeln("\n> Tem certeza que deseja remover o deck? [y] "),
   readLine(Option), string_upper(Option, OptionUpper),
   confirmRemove(OptionUpper, Deck).
 
@@ -171,9 +171,9 @@ confirmRemove(_, _):- nl, line, nl, mainMenu().
 
 editCardMenu(Deck, Card):-
   removeCard(Deck.name, Card),
-  write("\n> Qual será a frente da carta? "),
+  writeln("\n> Qual ser\u00E1 a frente da carta? "),
   readLine(Front),
-  write("\n> Qual será o verso da carta? "),
+  writeln("\n> Qual ser\u00E1 o verso da carta? "),
   readLine(Back),
   append([Front], [Back], NewCard),
   addCard(Deck.name, NewCard),
@@ -181,7 +181,7 @@ editCardMenu(Deck, Card):-
   mainMenu().
 
 removeCardMenu(Deck, Card):-
-  write("\n> Tem certeza que deseja remover a carta? [y/n] "),
+  write("\n> Tem certeza que deseja remover a carta? [y] "),
   readLine(Option), string_upper(Option, OptionUpper),
   confirmRemoveCard(OptionUpper, Deck, Card).
 
@@ -192,7 +192,7 @@ confirmRemoveCard("Y", Deck, Card):-
 confirmRemoveCard(_, _, _):- nl, line, nl, mainMenu().
 
 errorMenu():-
-  nl, writeln("########################## Opção inválida! #########################\n"), mainMenu().
+  nl, writeln("########################## Op\u00E7\u00E3o inv\u00E1lida! #########################\n"), mainMenu().
 
 menuOptionsDeck("C") :- createDeckMenu(), !.
 menuOptionsDeck("E") :- chooseDeckMenu(), !.
