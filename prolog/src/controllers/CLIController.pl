@@ -92,7 +92,7 @@ createDeckMenu():-
   createDeck(NameDeck, []),
   mainMenu().
 
-chooseDeckMenu():- %TODO: Menu de escolher deck
+chooseDeckMenu():-
   writeln("\n> Escolha o número do deck: "),
   read(NumDeck),
   chooseDeck(NumDeck).
@@ -109,56 +109,95 @@ chooseDeck(NumDeck):-
   write("\n> O que você deseja? "),
   read(Option),
   string_upper(Option, OptionUpper),
-  menuOptionsChoosedDeck(OptionUpper), !.
+  menuOptionsChoosedDeck(OptionUpper, Deck), !.
 
 chooseDeck(NumDeck):-
   writeln("\n# Número inválido #\n"),
   mainMenu().
 
-cardsMenu(_, []):-
-  readJSON(Decks)
-  writeln("                 Esse deck está vazio :(\n"), 
+editDeckNameMenu(Deck):-
+  writeln("> Qual o novo nome do deck?"),
+  read(NewDeckName), atom_string(NewDeckName, StrDeckName),
+  editDeckName(Deck.name, StrDeckName),
+  writeln("\nNome alterado com sucesso!\n"),
   mainMenu().
 
-% TODO
-% cardsMenu(Deck, Cards):-
-% addCardMenu(Deck):-
-% removeDeckMenu(Deck):-
-% addCardMenu(Deck):-
+cardsMenu(Deck, []):-
+  length(Deck.cards, LenCards), LenCards =:= 0,
+  writeln("\n        Esse deck está vazio :(\n"), 
+  mainMenu(), !.
+
+cardsMenu(Deck, []):-
+  writeln("        Você concluiu o estudo desse deck :D\n"), 
+  mainMenu(), !.
+
+cardsMenu(Deck, [H|T]):-
+  cardQA(Deck, H), cardsMenu(Deck, T).
+
+cardQA(Deck, Card):-
+  string_concat("\n<<  ", Deck.name, ParcialString),
+  string_concat(ParcialString, "  >>", StringName),
+  nth0(0, Card, Front), nth0(1, Card, Back), nl,
+  writeln(Front),
+  writeln("\n        > Pressione ENTER para revelar a resposta <    \n"),
+  get_single_char(_),
+  writeln(Back),
+  writeln("\n  [E] Editar carta  [R] Remover carta  [X] Voltar  "),
+  writeln("          > Pressione C para continuar <         "),
+  write("\n> O que você deseja? "),
+  read(Option),
+  string_upper(Option, OptionUpper),
+  menuOptionsCard(OptionUpper, Deck, Card).
+  
+addCardMenu(Deck):-
+  writeln("> Qual será a frente da carta?"),
+  read(Front), atom_string(Front, StrFront),
+  writeln("\n> Qual será o verso da carta?"),
+  read(Back), atom_string(Back, StrBack),
+  Card = [StrFront, StrBack],
+  addCard(Deck.name, Card),
+  writeln("\nCarta adicionada com sucesso!\n"),
+  mainMenu().
+
+removeDeckMenu(Deck):-
+  writeln("\n> Tem certeza que deseja remover o deck? [Y]"),
+  read(Option), string_upper(Option, OptionUpper),
+  confirmRemove(OptionUpper, Deck).
+
+confirmRemove("Y", Deck):- 
+  deleteDeck(Deck.name), 
+  writeln("\nO deck foi removido com sucesso!\n"),
+  mainMenu(), !.
+confirmRemove(_, _):- mainMenu().
+
+editCardMenu(Deck, Card):-
+  removeCard(Deck.name, Card),
+  writeln("> Qual será a frente da carta?"),
+  read(Front), atom_string(Front, StrFront),
+  writeln("\n> Qual será o verso da carta?"),
+  read(Back), atom_string(Back, StrBack),
+  Card = [StrFront, StrBack],
+  addCard(Deck.name, Card),
+  writeln("\nCarta editada com sucesso!\n"),
+  mainMenu().
 
 errorMenu():-
-  writeln("################# Opção inválida! #################\n")
+  writeln("################# Opção inválida! #################\n").
 
 menuOptionsDeck("C") :- createDeckMenu(), !.
 menuOptionsDeck("E") :- chooseDeckMenu(), !.
 menuOptionsDeck("S") :- halt, !.
 menuOptionsDeck(_) :- errorMenu().
 
-menuOptionsChoosedDeck("I") :- cardsMenu(Deck, Cards), !.
-menuOptionsChoosedDeck("E") :- editDeckNameMenu(), !.
-menuOptionsChoosedDeck("A") :- addCardMenu(), !.
-menuOptionsChoosedDeck("R") :- removeDeckMenu(), !.
-menuOptionsChoosedDeck("X") :- mainMenu(), !.
-menuOptionsChoosedDeck(_) :- errorMenu().
+menuOptionsChoosedDeck("I", Deck) :- cardsMenu(Deck, Deck.cards), !.
+menuOptionsChoosedDeck("E", Deck) :- editDeckNameMenu(Deck), !.
+menuOptionsChoosedDeck("A", Deck) :- addCardMenu(Deck), !.
+menuOptionsChoosedDeck("R", Deck) :- removeDeckMenu(Deck), !.
+menuOptionsChoosedDeck("X", _) :- mainMenu(), !.
+menuOptionsChoosedDeck(_, _) :- errorMenu().
 
-
-% cardsMenu:: Deck -> [Card] -> IO()
-% cardsMenu deck deckCards = do
-%   deckSearch <- search (name deck)
-%   case (length (cards deckSearch)) == 0 of
-%     True -> do
-%       putStrLn putLine
-%       putStrLn "              Esse deck está vazio :(           \n"
-%       mainMenu
-%     False -> do 
-%       shuffleDeckAndSave deckSearch
-%       let headCard = (head deckCards)
-
-%       case length deckCards == 0 of
-%         True -> do
-%           putStrLn putLine
-%           putStrLn "        Você concluiu o estudo desse deck :D      \n"
-%           mainMenu
-%         False -> do
-%           cardQA deck headCard
-%           cardsMenu deck $ tail deckCards
+menuOptionsCard("E", Deck, Card) :- editCardMenu(Deck, Card), !.
+menuOptionsCard("R", Deck, Card) :- removeCardMenu(Deck, Card), !.
+menuOptionsCard("X", _, _) :- mainMenu(), !.
+menuOptionsCard("C", _, _) :- !.
+menuOptionsCard(_, _, _) :- errorMenu().
