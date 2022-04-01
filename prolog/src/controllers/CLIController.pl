@@ -55,7 +55,6 @@ initialMenu():-
   nl.
 
 mainMenu:- 
-  nl,
   readJSON(Decks),
   maplist(getDeckName, Decks, DeckNames),
   length(DeckNames, L),
@@ -110,23 +109,23 @@ chooseDeck(NumDeck):-
 
 chooseDeck(NumDeck):-
   writeln("\n# Número inválido #\n"),
-  mainMenu().
+  line, nl, mainMenu().
 
 editDeckNameMenu(Deck):-
-  writeln("> Qual o novo nome do deck?"),
+  writeln("\n> Qual o novo nome do deck?"),
   read(NewDeckName), atom_string(NewDeckName, StrDeckName),
   editDeckName(Deck.name, StrDeckName),
   writeln("\nNome alterado com sucesso!\n"),
-  line, mainMenu().
+  line, nl, mainMenu().
 
 cardsMenu(Deck, []):-
   length(Deck.cards, LenCards), LenCards =:= 0,
   writeln("\n                       Esse deck está vazio :(\n"), 
-  line, mainMenu(), !.
+  line, nl, mainMenu(), !.
 
 cardsMenu(Deck, []):-
   writeln("\n                  Você concluiu o estudo desse deck :D\n"), 
-  line, mainMenu(), !.
+  line, nl, mainMenu(), !.
 
 cardsMenu(Deck, [H|T]):-
   cardQA(Deck, H), cardsMenu(Deck, T).
@@ -154,7 +153,7 @@ addCardMenu(Deck):-
   Card = [StrFront, StrBack],
   addCard(Deck.name, Card),
   writeln("\nCarta adicionada com sucesso!\n"),
-  line,
+  line, nl,
   mainMenu().
 
 removeDeckMenu(Deck):-
@@ -165,8 +164,8 @@ removeDeckMenu(Deck):-
 confirmRemove("Y", Deck):- 
   deleteDeck(Deck.name), 
   writeln("\nO deck foi removido com sucesso!\n"),
-  line, mainMenu(), !.
-confirmRemove(_, _):- nl, line, mainMenu().
+  line, nl, mainMenu(), !.
+confirmRemove(_, _):- nl, line, nl, mainMenu().
 
 editCardMenu(Deck, Card):-
   removeCard(Deck.name, Card),
@@ -187,11 +186,11 @@ removeCardMenu(Deck, Card):-
 confirmRemoveCard("Y", Deck, Card):- 
   removeCard(Deck.name, Card), 
   writeln("\nA carta foi removida com sucesso!\n"),
-  line, mainMenu(), !.
-confirmRemoveCard(_, _, _):- nl, line, mainMenu().
+  line, nl, mainMenu(), !.
+confirmRemoveCard(_, _, _):- nl, line, nl, mainMenu().
 
 errorMenu():-
-  writeln("################# Opção inválida! #################\n").
+  nl, writeln("########################## Opção inválida! #########################\n"), mainMenu().
 
 menuOptionsDeck("C") :- createDeckMenu(), !.
 menuOptionsDeck("E") :- chooseDeckMenu(), !.
@@ -202,11 +201,11 @@ menuOptionsChoosedDeck("I", Deck) :- cardsMenu(Deck, Deck.cards), !.
 menuOptionsChoosedDeck("E", Deck) :- editDeckNameMenu(Deck), !.
 menuOptionsChoosedDeck("A", Deck) :- addCardMenu(Deck), !.
 menuOptionsChoosedDeck("R", Deck) :- removeDeckMenu(Deck), !.
-menuOptionsChoosedDeck("X", _) :- mainMenu(), !.
+menuOptionsChoosedDeck("X", _) :- nl, mainMenu(), !.
 menuOptionsChoosedDeck(_, _) :- errorMenu().
 
 menuOptionsCard("E", Deck, Card) :- editCardMenu(Deck, Card), !.
 menuOptionsCard("R", Deck, Card) :- removeCardMenu(Deck, Card), !.
-menuOptionsCard("X", _, _) :- mainMenu(), !.
+menuOptionsCard("X", _, _) :- nl, mainMenu(), !.
 menuOptionsCard("C", _, _) :- !.
 menuOptionsCard(_, _, _) :- errorMenu().
