@@ -5,7 +5,7 @@
   "main": "./src/index.pl",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "swipl -s src/index.pl"
+    "start": "swipl -s src/index.pl -g main"
   },
   "author": "",
   "license": "ISC"
