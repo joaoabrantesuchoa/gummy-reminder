@@ -5,15 +5,16 @@
   shuffleCards/1,
   showDecks/0
 ]).
-:-use_module('../util/jsonfunctions.pl').
+:-use_module('../util/JsonFunctions.pl').
 
 createDeck(Name, Cards) :-
 	jsonfunctions:readJSON(File),
-	\+ checkNameDeckAvailableJSON(File, Name),
+	\+ checkNameDeckAvailableJSON(File, Name), %% TODO Fix isAvailable
 	decksToJSON(File, DecksListJSON),
 	deckToJSON(Name, Cards, DeckJSON),
 	append(DecksListJSON, [DeckJSON], OutJSON),
 	writeJSON(OutJSON).
+	%%   writeln("\nDeck criado com sucesso!\n") ou nao
 deleteDeck(DeckName) :-
 	readJSON(File),
 	deleteDeckJSON(File, DeckName, Out),
