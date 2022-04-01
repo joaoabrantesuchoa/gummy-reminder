@@ -24,9 +24,10 @@ gummyReminderLogo():-
   writeln(" |  |_| |_|   |___ |       ||   ||       ||  | |  ||   |___ |  |_| |_ "),
   writeln(" |   __  ||    ___||       ||   ||  _    ||  |_|  ||    ___||   __  | "),
   writeln(" |  |  | ||   |___ | ||_|| ||   || | |   ||       ||   |___ |  |  | | "),
-  writeln(" |__|  |_||_______||_|   |_||___||_|  |__||______| |_______||__|  |_| "), nl,
-  line,
-  nl.
+  writeln(" |__|  |_||_______||_|   |_||___||_|  |__||______| |_______||__|  |_| ").
+
+
+cardLine():- writeln("        - - - - - - - - - - - - - - - - - - - - - - - - - -\n"). 
 
 line:- 
   repl("\u2500", 70, L),
@@ -46,8 +47,8 @@ initialMenu():-
   lineAtom(29, Line29Length),
   atomic_list_concat([Line30Length, " Bem-vindo ", Line29Length], BemVindo),
   writeln(BemVindo),
-  writeln("\n"),
-  writeln("                        Aprenda com o auxílio de\n"),
+  write("\n"),
+  writeln("                        Aprenda com o auxílio de"),
   writeln("                        cartões de memorização\n"),
   writeln("               > Pressione qualquer tecla para iniciar <\n"),
   line,
@@ -66,14 +67,9 @@ mainMenu:-
     
   ),
   writeln(MenuDecks),
-  write("\n              [C] Criar deck  [E] Escolher deck  [S] Sair\n"),
+  write("\n        [c] Criar deck  [e] Escolher deck  [s] Sair\n"),
   write("\n> O que você deseja? "),
   read(Option),
-  % (
-  %   Option == "C"; Option == "c" -> createDeckMenu();
-  %   Option == "E"; Option == "e" -> chooseDeckMenu();
-  %   Option == "S"; Option == "s" -> halt
-  % ).
   string_upper(Option, OptionUpper),
   menuOptionsDeck(OptionUpper).
 
@@ -87,27 +83,28 @@ listDecksNamesAndIndex(L, [H|T], [HOut|Rest]):-
   listDecksNamesAndIndex(L2, T, Rest).
 
 createDeckMenu():-
-  writeln("Digite o nome do deck:"),
+  writeln("\nDigite o nome do deck:"),
   read(NameDeck),
-  createDeck(NameDeck, []),
+  createDeck(NameDeck, []), nl, line,
   mainMenu().
 
 chooseDeckMenu():-
   writeln("\n> Escolha o número do deck: "),
   read(NumDeck),
-  chooseDeck(NumDeck).
+  chooseDeck(NumDeck), !.
 
 chooseDeck(NumDeck):-
+  nl, line, 
   readJSON(Decks), length(Decks, LenDecks),
   NumDeck > 0, NumDeck =< LenDecks,
   Indice is NumDeck - 1, nth0(Indice, Decks, Deck),
   string_concat("\n<<  ", Deck.name, ParcialString),
   string_concat(ParcialString, "  >>", StringName),
   writeln(StringName),
-  writeln("\n[I] Iniciar revisão  [E] Editar nome  [A] Add carta\n"),
+  writeln("\n[i] Iniciar revisão  [e] Editar nome  [a] Add carta\n"),
   writeln("          [R] Remover deck   [X] Voltar"),
   write("\n> O que você deseja? "),
-  read(Option),
+  read(Option), nl, line,
   string_upper(Option, OptionUpper),
   menuOptionsChoosedDeck(OptionUpper, Deck), !.
 
@@ -120,16 +117,16 @@ editDeckNameMenu(Deck):-
   read(NewDeckName), atom_string(NewDeckName, StrDeckName),
   editDeckName(Deck.name, StrDeckName),
   writeln("\nNome alterado com sucesso!\n"),
-  mainMenu().
+  line, mainMenu().
 
 cardsMenu(Deck, []):-
   length(Deck.cards, LenCards), LenCards =:= 0,
-  writeln("\n        Esse deck está vazio :(\n"), 
-  mainMenu(), !.
+  writeln("\n                       Esse deck está vazio :(\n"), 
+  line, mainMenu(), !.
 
 cardsMenu(Deck, []):-
-  writeln("        Você concluiu o estudo desse deck :D\n"), 
-  mainMenu(), !.
+  writeln("\n                  Você concluiu o estudo desse deck :D\n"), 
+  line, mainMenu(), !.
 
 cardsMenu(Deck, [H|T]):-
   cardQA(Deck, H), cardsMenu(Deck, T).
@@ -139,40 +136,41 @@ cardQA(Deck, Card):-
   string_concat(ParcialString, "  >>", StringName),
   nth0(0, Card, Front), nth0(1, Card, Back), nl,
   writeln(Front),
-  writeln("\n        > Pressione ENTER para revelar a resposta <    \n"),
-  get_single_char(_),
+  writeln("\n        > Pressione ALGUMA LETRA para revelar a resposta <    \n"),
+  read(Letra), cardLine(),
   writeln(Back),
-  writeln("\n  [E] Editar carta  [R] Remover carta  [X] Voltar  "),
-  writeln("          > Pressione C para continuar <         "),
+  writeln("\n        [e] Editar carta  [r] Remover carta  [x] Voltar  "),
+  writeln("                 > Pressione c para continuar <         "),
   write("\n> O que você deseja? "),
-  read(Option),
+  read(Option), nl, line,
   string_upper(Option, OptionUpper),
   menuOptionsCard(OptionUpper, Deck, Card).
   
 addCardMenu(Deck):-
-  writeln("> Qual será a frente da carta?"),
+  writeln("\n> Qual será a frente da carta?"),
   read(Front), atom_string(Front, StrFront),
   writeln("\n> Qual será o verso da carta?"),
   read(Back), atom_string(Back, StrBack),
   Card = [StrFront, StrBack],
   addCard(Deck.name, Card),
   writeln("\nCarta adicionada com sucesso!\n"),
+  line,
   mainMenu().
 
 removeDeckMenu(Deck):-
-  writeln("\n> Tem certeza que deseja remover o deck? [Y]"),
+  writeln("\n> Tem certeza que deseja remover o deck? [y]"),
   read(Option), string_upper(Option, OptionUpper),
   confirmRemove(OptionUpper, Deck).
 
 confirmRemove("Y", Deck):- 
   deleteDeck(Deck.name), 
   writeln("\nO deck foi removido com sucesso!\n"),
-  mainMenu(), !.
-confirmRemove(_, _):- mainMenu().
+  line, mainMenu(), !.
+confirmRemove(_, _):- nl, line, mainMenu().
 
 editCardMenu(Deck, Card):-
   removeCard(Deck.name, Card),
-  writeln("> Qual será a frente da carta?"),
+  writeln("\n> Qual será a frente da carta?"),
   read(Front), atom_string(Front, StrFront),
   writeln("\n> Qual será o verso da carta?"),
   read(Back), atom_string(Back, StrBack),
@@ -180,6 +178,17 @@ editCardMenu(Deck, Card):-
   addCard(Deck.name, Card),
   writeln("\nCarta editada com sucesso!\n"),
   mainMenu().
+
+removeCardMenu(Deck, Card):-
+  writeln("\n> Tem certeza que deseja remover a carta? [y]"),
+  read(Option), string_upper(Option, OptionUpper),
+  confirmRemoveCard(OptionUpper, Deck, Card).
+
+confirmRemoveCard("Y", Deck, Card):- 
+  removeCard(Deck.name, Card), 
+  writeln("\nA carta foi removida com sucesso!\n"),
+  line, mainMenu(), !.
+confirmRemoveCard(_, _, _):- nl, line, mainMenu().
 
 errorMenu():-
   writeln("################# Opção inválida! #################\n").
