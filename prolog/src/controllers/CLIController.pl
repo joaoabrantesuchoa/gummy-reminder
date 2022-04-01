@@ -116,7 +116,7 @@ chooseDeck(NumDeck):-
 editDeckNameMenu(Deck):-
   write("\n> Qual o novo nome do deck? "),
   readLine(NewDeckName),
-  editDeckName(Deck.name, StrDeckName),
+  editDeckName(Deck.name, NewDeckName),
   writeln("\nNome alterado com sucesso!\n"),
   line, nl, mainMenu().
 
@@ -199,7 +199,17 @@ menuOptionsDeck("E") :- chooseDeckMenu(), !.
 menuOptionsDeck("S") :- halt, !.
 menuOptionsDeck(_) :- errorMenu().
 
-menuOptionsChoosedDeck("I", Deck) :- shuffleCards(Deck.name), cardsMenu(Deck, Deck.cards), !.
+menuOptionsChoosedDeck("I", Deck) :-
+  length(Deck.cards, L),
+  (
+    L == 0 -> 
+    writeln("\n                       Esse deck est\u00E1 vazio :(\n"),
+    line,
+    mainMenu
+    ;
+    shuffleCards(Deck.name),
+    cardsMenu(Deck, Deck.cards), !
+    ).
 menuOptionsChoosedDeck("E", Deck) :- editDeckNameMenu(Deck), !.
 menuOptionsChoosedDeck("A", Deck) :- addCardMenu(Deck), !.
 menuOptionsChoosedDeck("R", Deck) :- removeDeckMenu(Deck), !.

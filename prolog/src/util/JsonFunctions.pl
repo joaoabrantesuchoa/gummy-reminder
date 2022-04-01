@@ -57,13 +57,18 @@ removeCardJSON([H|T], DeckName, CardToRemove, [H|Out]) :-
 	removeCardJSON(T, DeckName, CardToRemove, Out).
 
 % Mudando o name de um agente
-shuffleCardsJSON([], _, []).
-shuffleCardsJSON([H|Rest], H.name, [_{name:H.name, cards: Cards}|RestOut]) :-
+shuffleCardsJSON([], _, _).
+shuffleCardsJSON([H|Rest], DeckName, [_{name:H.name, cards: Cards}|RestOut]) :-
 	length(Cards, L),
-	(
-		L > 1 -> random_permutation(H.cards, Cards)
-		),
-	shuffleCardsJSON(Rest, H.name, RestOut).
+	(H.name == DeckName -> 
+		(L > 0 -> 
+			random_permutation(H.cards, Cards),
+			shuffleCardsJSON(Rest, DeckName, RestOut)
+			)
+			;
+			Cards = H.cards,
+			shuffleCardsJSON(Rest, DeckName, RestOut)
+		).
 shuffleCardsJSON([H|T], DeckName, [H|Out]) :- 
 	shuffleCardsJSON(T, DeckName, Out).
 
